@@ -11,6 +11,7 @@
             --text-color: #f5f5f5;
             --accent-color: #d4a373;
             --border-color: #333333;
+            --whatsapp-color: #25d366;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -49,6 +50,9 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: slideUp 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .product-card:hover {
             transform: translateY(-6px);
@@ -74,6 +78,24 @@
             color: var(--accent-color);
             font-size: 1.1rem;
             font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .whatsapp-btn {
+            display: block;
+            width: calc(100% - 36px);
+            margin: 0 18px 18px 18px;
+            padding: 12px;
+            background-color: var(--whatsapp-color);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .whatsapp-btn:hover {
+            background-color: #20ba5a;
+            transform: scale(1.02);
         }
         .loading {
             text-align: center;
@@ -105,7 +127,6 @@
         </div>
     </main>
 
-    <!-- كود ربط وعرض منتجات Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -123,6 +144,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // رقم الواتساب الخاص بك مُحدث تلقائياً
+        const WHATSAPP_NUMBER = "201097597133"; 
+
         async function loadProducts() {
             const container = document.getElementById("products-container");
             try {
@@ -130,20 +154,29 @@
                 container.innerHTML = "";
 
                 if (querySnapshot.empty) {
-                    container.innerHTML = `<div class="loading">لا توجد منتجات مضافة حتى الآن. اذهب للوحة التحكم لإضافة منتجاتك!</div>`;
+                    container.innerHTML = `<div class="loading">لا توجد منتجات مضافة حتى الآن. اذهب لوحة التحكم لإضافة منتجاتك!</div>`;
                     return;
                 }
 
                 querySnapshot.forEach((doc) => {
                     const p = doc.data();
+                    const productName = p.name || 'بدون اسم';
+                    const productPrice = p.price || 0;
+                    
+                    const message = encodeURIComponent(`مرحباً، أريد طلب هذا المنتج:\n- الاسم: ${productName}\n- السعر: ${productPrice} ج.م`);
+                    const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+
                     const card = document.createElement("div");
                     card.className = "product-card";
                     card.innerHTML = `
-                        <img src="${p.image || ''}" alt="${p.name || 'منتج'}" loading="lazy">
-                        <div class="product-info">
-                            <div class="product-title">${p.name || 'بدون اسم'}</div>
-                            <div class="product-price">${p.price || 0} ج.م</div>
+                        <div>
+                            <img src="${p.image || ''}" alt="${productName}" loading="lazy">
+                            <div class="product-info">
+                                <div class="product-title">${productName}</div>
+                                <div class="product-price">${productPrice} ج.م</div>
+                            </div>
                         </div>
+                        <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">اطلب عبر الواتساب 💬</a>
                     `;
                     container.appendChild(card);
                 });
