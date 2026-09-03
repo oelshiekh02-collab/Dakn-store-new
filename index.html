@@ -24,7 +24,7 @@
         }
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             animation: fadeIn 0.8s ease-in-out;
         }
         h1 {
@@ -37,6 +37,45 @@
             color: #aaa;
             font-size: 1.2rem;
         }
+        /* تصميم شريط العروض الفخم والمتناسق مع المتجر */
+        .promo-banner {
+            background: linear-gradient(135deg, #2a2218, #1a1a1a);
+            border: 1px solid var(--accent-color);
+            border-radius: 14px;
+            padding: 20px;
+            max-width: 1160px;
+            margin: 0 auto 40px auto;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(212, 163, 115, 0.15);
+            animation: fadeIn 0.8s ease-in-out;
+            display: none; /* مخفي افتراضياً حتى يتم تفعيله من الأدمن */
+        }
+        .promo-title {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .promo-desc {
+            color: #ddd;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        .promo-btn {
+            display: inline-block;
+            background-color: var(--whatsapp-color);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .promo-btn:hover {
+            background-color: #20ba5a;
+            transform: scale(1.03);
+        }
+
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -119,9 +158,16 @@
 <body>
 
     <header>
-        <h1>متجر دكن</h1>
+        <h1>Dakn Store </h1>
         <p>الفخامة والأناقة في كل قطعة</p>
     </header>
+
+    <!-- شريط العروض الفخم (يظهر تلقائياً لو تم تفعيله من الأدمن) -->
+    <div id="promo-banner" class="promo-banner">
+        <div id="promo-title" class="promo-title">عرض خاص لفترة محدودة 🔥</div>
+        <div id="promo-text" class="promo-desc">جاري تحميل تفاصيل العرض...</div>
+        <a id="promo-whatsapp-btn" href="#" target="_blank" class="promo-btn">اسأل عن العروض عبر الواتساب 💬</a>
+    </div>
 
     <main>
         <div id="products-container" class="products-grid">
@@ -131,7 +177,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAeCLqtBvTvk430tgAIBRLu_r7nCFKu4ao",
@@ -148,19 +194,43 @@
 
         const WHATSAPP_NUMBER = "201097597133"; 
 
-        async function loadProducts() {
+        // دالة جلب وعرض العروض والمنتجات
+        async function loadStoreData() {
+            // 1. جلب بيانات العرض
+            try {
+                const promoDocRef = doc(db, "settings", "promo");
+                const promoSnap = await getDoc(promoDocRef);
+                const promoBanner = document.getElementById("promo-banner");
+
+                if (promoSnap.exists()) {
+                    const promoData = promoSnap.data();
+                    if (promoData.isActive) {
+                        document.getElementById("promo-title").textContent = promoData.title || "عرض خاص لفترة محدودة 🔥";
+                        document.getElementById("promo-text").textContent = promoData.description || "";
+                        
+                        const promoMessage = encodeURIComponent(`مرحباً، أود الاستفسار عن تفاصيل العرض الحالي: "${promoData.title}"`);
+                        document.getElementById("promo-whatsapp-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${promoMessage}`;
+                        
+                        promoBanner.style.display = "block"; // إظهار الشريط للعميل
+                    }
+                }
+            } catch (err) {
+                console.error("خطأ في جلب العرض:", err);
+            }
+
+            // 2. جلب المنتجات
             const container = document.getElementById("products-container");
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 container.innerHTML = "";
 
                 if (querySnapshot.empty) {
-                    container.innerHTML = `<div class="loading">لا توجد منتجات مضافة حتى الآن. اذهب لوحة التحكم لإضافة منتجاتك!</div>`;
+                    container.innerHTML = `<div class="loading">لا توجد منتجات مضافة حتى الآن.</div>`;
                     return;
                 }
 
-                querySnapshot.forEach((doc) => {
-                    const p = doc.data();
+                querySnapshot.forEach((docItem) => {
+                    const p = docItem.data();
                     const productName = p.name || 'بدون اسم';
                     const productPrice = p.price || 0;
                     
@@ -187,7 +257,7 @@
             }
         }
 
-        loadProducts();
+        loadStoreData();
     </script>
 </body>
 </html>
