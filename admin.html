@@ -3,32 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم متجر دكن</title>
+    <title>لوحة تحكم متجر داكن - Admin</title>
     <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text-color: #f5f5f5;
+            --accent-color: #d4a373;
+            --border-color: #333333;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f0f0f;
-            color: #f5f5f5;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 20px;
         }
         .admin-container {
             max-width: 500px;
             margin: 40px auto;
-            background: #1a1a1a;
+            background: var(--card-bg);
             padding: 30px;
             border-radius: 16px;
-            border: 1px solid #333;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             animation: fadeIn 0.6s ease-in-out;
         }
         h2 {
             text-align: center;
             margin-bottom: 25px;
-            color: #d4a373;
+            color: var(--accent-color);
+            letter-spacing: 1px;
+            animation: slideDown 0.6s ease-in-out;
         }
         .form-group {
             margin-bottom: 20px;
+            animation: slideUp 0.6s ease-in-out;
         }
         label {
             display: block;
@@ -45,26 +55,33 @@
             color: white;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
         input:focus {
-            border-color: #d4a373;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px rgba(212, 163, 115, 0.2);
+        }
+        input[type="file"] {
+            padding: 10px;
+            cursor: pointer;
         }
         button {
             width: 100%;
             padding: 14px;
-            background-color: #d4a373;
+            background-color: var(--accent-color);
             color: #0f0f0f;
             border: none;
             border-radius: 8px;
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            animation: slideUp 0.8s ease-in-out;
         }
         button:hover {
             background-color: #e5b282;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
         }
         #status {
             text-align: center;
@@ -72,7 +89,15 @@
             font-weight: bold;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -80,12 +105,12 @@
 <body>
 
     <div class="admin-container">
-        <h2>لوحة التحكم - إضافة منتج</h2>
+        <h2>لوحة تحكم متجر دكن</h2>
         <form id="product-form">
             <div class="form-group">
                 <label for="admin-pass">كلمة سر الأدمن:</label>
-                <!-- type="password" تضمن إن الحروف تظهر مخفية كنجوم/نقاط -->
-                <input type="password" id="admin-pass" required placeholder="أدخل كلمة المرور السرية">
+                <!-- خانة كلمة المرور السرية بنظام النقاط -->
+                <input type="password" id="admin-pass" required placeholder="أدخل كلمة المرور (12345)">
             </div>
             <div class="form-group">
                 <label for="p-name">اسم المنتج:</label>
@@ -96,7 +121,8 @@
                 <input type="number" id="p-price" required placeholder="أدخل السعر">
             </div>
             <div class="form-group">
-                <label for="p-image">اختر صورة المنتج من الجهاز:</label>
+                <label for="p-image">صورة المنتج من الجهاز مباشرة:</label>
+                <!-- زر رفع الصورة من الجهاز مباشرة بدون أي روابط -->
                 <input type="file" id="p-image" accept="image/*" required>
             </div>
             <button type="submit" id="save-btn">حفظ وإضافة المنتج</button>
@@ -104,6 +130,7 @@
         <div id="status"></div>
     </div>
 
+    <!-- ربط Firebase وحفظ البيانات -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -124,9 +151,9 @@
         const form = document.getElementById("product-form");
         const statusDiv = document.getElementById("status");
 
-        // كلمة المرور المطلوبة (يمكنك تغييرها هنا إلى أي كلمة سر تريدها)
         const CORRECT_PASSWORD = "12345";
 
+        // دالة تحويل الصورة المرفوعة من الجهاز إلى Base64 عشان تتخزين بدون روابط خارجية
         const convertImageToBase64 = (file) => {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -140,18 +167,16 @@
             e.preventDefault();
 
             const enteredPass = document.getElementById("admin-pass").value;
-
-            // التحقق من كلمة المرور
             if (enteredPass !== CORRECT_PASSWORD) {
                 statusDiv.style.color = "#ff6b6b";
-                statusDiv.textContent = "كلمة المرور غير صحيحة! حاول مرة أخرى.";
+                statusDiv.textContent = "كلمة المرور غير صحيحة!";
                 return;
             }
 
             const btn = document.getElementById("save-btn");
             btn.disabled = true;
             statusDiv.style.color = "#aaa";
-            statusDiv.textContent = "جاري معالجة الصورة وحفظ المنتج...";
+            statusDiv.textContent = "جاري رفع الصورة وحفظ المنتج...";
 
             const name = document.getElementById("p-name").value;
             const price = document.getElementById("p-price").value;
@@ -171,12 +196,12 @@
                 });
 
                 statusDiv.style.color = "#4ade80";
-                statusDiv.textContent = "تم رفع الصورة وحفظ المنتج بنجاح في متجر داكن! 🚀";
+                statusDiv.textContent = "تم إضافة المنتج بنجاح إلى متجر دكن! 🚀";
                 form.reset();
             } catch (error) {
-                console.error("خطأ أثناء الحفظ:", error);
+                console.error("خطأ:", error);
                 statusDiv.style.color = "#ff6b6b";
-                statusDiv.textContent = "حدث خطأ أثناء الحفظ، حاول مرة أخرى.";
+                statusDiv.textContent = "حدث خطأ أثناء الحفظ، تأكد من الاتصال بالإنترنت.";
             } finally {
                 btn.disabled = false;
             }
