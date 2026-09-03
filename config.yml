@@ -1,0 +1,17 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "products"
+    label: "المنتجات"
+    folder: "products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "اسم القطعة", name: "title", widget: "string"}
+      - {label: "السعر", name: "price", widget: "string"}
+      - {label: "صورة القطعة", name: "image", widget: "image"}
