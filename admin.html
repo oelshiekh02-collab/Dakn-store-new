@@ -5,15 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة التحكم - متجر داكن</title>
   <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
-    body { background-color: #0f0f0f; color: #fff; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .admin-box { background: #1a1a1a; padding: 30px; border-radius: 12px; width: 100%; max-width: 480px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
-    h2 { text-align: center; margin-bottom: 25px; color: #fff; font-size: 26px; }
-    label { display: block; margin-bottom: 10px; color: #ddd; font-size: 18px; font-weight: bold; }
-    input, button { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #444; background: #2a2a2a; color: #fff; font-size: 18px; }
-    input:focus { border-color: #fff; outline: none; }
-    button { background: #fff; color: #000; font-weight: bold; cursor: pointer; font-size: 20px; transition: 0.2s; }
-    button:hover { background: #ddd; }
+    body { background-color: #0b0b0b; color: #fff; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .admin-box { background: #161616; padding: 30px; border-radius: 16px; width: 100%; max-width: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid #222; animation: fadeIn 0.8s ease-in-out; }
+    h2 { text-align: center; margin-bottom: 25px; color: #fff; font-size: 28px; letter-spacing: 1px; }
+    label { display: block; margin-bottom: 10px; color: #ccc; font-size: 18px; font-weight: bold; }
+    input, button { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #333; background: #222; color: #fff; font-size: 18px; transition: 0.3s; }
+    input:focus { border-color: #fff; outline: none; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+    input[type="file"] { padding: 10px; cursor: pointer; }
+    button { background: #fff; color: #000; font-weight: bold; cursor: pointer; font-size: 20px; margin-top: 10px; }
+    button:hover { background: #e0e0e0; transform: scale(1.02); }
+    .back-link { display: block; text-align: center; margin-top: 15px; color: #888; text-decoration: none; font-size: 16px; }
+    .back-link:hover { color: #fff; }
   </style>
 </head>
 <body>
@@ -22,22 +29,43 @@
     <h2>إدارة متجر داكن</h2>
     <form id="productForm">
       <label>اسم المنتج أو القطعة:</label>
-      <input type="text" id="title" placeholder="مثال: تيشرت أوفرسايز" required>
+      <input type="text" id="title" placeholder="مثال: تيشرت أوفرسايز داكن" required>
 
       <label>السعر (بالجنيه):</label>
       <input type="text" id="price" placeholder="مثال: 350" required>
 
-      <label>رابط الصورة:</label>
-      <input type="text" id="image" placeholder="ضع رابط الصورة هنا" required>
+      <label>اختر صورة المنتج من جهازك:</label>
+      <input type="file" id="imageFile" accept="image/*" required>
 
-      <button type="submit">حفظ وإضافة المنتج</button>
+      <button type="submit">حفظ ونشر المنتج</button>
     </form>
+    <a href="index.html" class="back-link">الذهاب للمتجر الرئيسي</a>
   </div>
 
   <script>
     document.getElementById('productForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert('تم حفظ البيانات بنجاح!');
+      const title = document.getElementById('title').value;
+      const price = document.getElementById('price').value;
+      const fileInput = document.getElementById('imageFile');
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const imageData = event.target.result;
+        
+        // حفظ المنتج في الذاكرة المحلية عشان يظهر للعملاء
+        const newProduct = { title, price, image: imageData };
+        let products = JSON.parse(localStorage.getItem('dakn_products')) || [];
+        products.push(newProduct);
+        localStorage.setItem('dakn_products', JSON.stringify(products));
+
+        alert('تم رفع ونشر المنتج بنجاح في المتجر!');
+        document.getElementById('productForm').reset();
+      };
+
+      if (fileInput.files[0]) {
+        reader.readAsDataURL(fileInput.files[0]);
+      }
     });
   </script>
 
