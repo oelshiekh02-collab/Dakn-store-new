@@ -3,18 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dakn Store | داكن</title>
+  <title>متجر داكن | Dakn Store</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
-    body { background-color: #0f0f0f; color: #f5f5f5; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 20px; }
-    h1 { font-size: 2.5rem; letter-spacing: 2px; margin-bottom: 10px; color: #fff; }
-    p { font-size: 1.1rem; color: #aaa; margin-bottom: 25px; }
-    .btn { background-color: #fff; color: #000; padding: 12px 28px; text-decoration: none; font-weight: bold; border-radius: 6px; display: inline-block; }
+    * { box-sizing: border-box; font-family: system-ui, sans-serif; margin: 0; padding: 0; }
+    body { background-color: #0f0f0f; color: #fff; padding: 20px; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #333; margin-bottom: 30px; }
+    h1 { font-size: 24px; letter-spacing: 1px; }
+    .admin-btn { background: #fff; color: #000; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 16px; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .product-card { background: #1a1a1a; border-radius: 10px; overflow: hidden; border: 1px solid #333; padding: 15px; text-align: center; }
+    .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; background: #2a2a2a; }
+    .product-card h3 { font-size: 20px; margin-bottom: 10px; color: #fff; }
+    .product-card p { font-size: 18px; color: #aaa; margin-bottom: 15px; }
+    .buy-btn { display: block; width: 100%; background: #fff; color: #000; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 16px; }
+    .buy-btn:hover { background: #ddd; }
   </style>
 </head>
 <body>
-  <h1>DAKN STORE</h1>
-  <p>المتجر قيد التشغيل 🔥</p>
-  <a href="admin.html" class="btn">لوحة التحكم (Admin)</a>
+
+  <header>
+    <h1>DAKN STORE</h1>
+    <a href="admin.html" class="admin-btn">لوحة التحكم</a>
+  </header>
+
+  <main>
+    <div id="productsContainer" class="products-grid">
+      <!-- المنتجات هتظهر هنا أوتوماتيك -->
+      <p style="grid-column: 1/-1; text-align: center; color: #777; font-size: 18px;">جاري تحميل المنتجات...</p>
+    </div>
+  </main>
+
+  <script>
+    // كود مؤقت لعرض منتج تجريبي لحد ما نربط قاعدة البيانات الكاملة
+    const container = document.getElementById('productsContainer');
+    container.innerHTML = `
+      <div class="product-card">
+        <img src="https://via.placeholder.com/300x300.png?text=Dakn+Product" alt="منتج تجريبي">
+        <h3>تيشرت داكن الأساسي</h3>
+        <p>350 جنيه</p>
+        <a href="#" class="buy-btn" onclick="alert('تم استلام طلب الشراء بنجاح!')">اطلب الآن</a>
+      </div>
+    `;
+  </script>
+
 </body>
 </html>
