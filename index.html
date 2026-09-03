@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>متجر دكن - Dakn Store</title>
+    <!-- استدعاء خط Cairo العربي الفخم -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0f0f0f;
@@ -14,7 +16,7 @@
             --whatsapp-color: #25d366;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
@@ -27,17 +29,17 @@
         }
         h1 {
             color: var(--accent-color);
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
             letter-spacing: 1px;
         }
         header p {
             color: #aaa;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 25px;
             max-width: 1200px;
             margin: 0 auto;
@@ -69,15 +71,15 @@
             padding: 18px;
         }
         .product-title {
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.25rem;
+            font-weight: 700;
             margin-bottom: 10px;
             color: #fff;
         }
         .product-price {
             color: var(--accent-color);
-            font-size: 1.1rem;
-            font-weight: bold;
+            font-size: 1.2rem;
+            font-weight: 700;
             margin-bottom: 15px;
         }
         .whatsapp-btn {
@@ -89,8 +91,8 @@
             color: white;
             text-align: center;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
+            border-radius: 10px;
+            font-weight: 700;
             transition: background 0.2s, transform 0.1s;
         }
         .whatsapp-btn:hover {
@@ -144,7 +146,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // رقم الواتساب الخاص بك مُحدث تلقائياً
         const WHATSAPP_NUMBER = "201097597133"; 
 
         async function loadProducts() {
