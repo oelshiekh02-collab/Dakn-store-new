@@ -97,7 +97,7 @@
         fileSha = result.content.sha;
         alert("تم رفع ونشر المنتج بنجاح وتحديث المتجر لكل الأجهزة!");
       } else {
-        alert("حدث خطأ أثناء الحفظ.");
+        alert("حدث خطأ أثناء الحفظ، جرب صورة أصغر حجماً.");
       }
     }
 
@@ -126,6 +126,30 @@
       }
     }
 
+    // دالة تصغير وصغط الصورة تلقائياً قبل الرفع
+    function compressImage(file, callback) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 600; // عرض مناسب وواضح جداً للمنتج
+          const scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scaleSize;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          // ضغط الصورة بصيغة جودة 70% لتكون خفيفة جداً على جيت هاب
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          callback(compressedDataUrl);
+        }
+        img.src = e.target.result;
+      }
+      reader.readAsDataURL(file);
+    }
+
     document.getElementById('productForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const title = document.getElementById('title').value;
@@ -133,24 +157,19 @@
       const fileInput = document.getElementById('imageFile');
       const btn = document.getElementById('submitBtn');
 
-      btn.innerText = "جاري الرفع والنشر...";
+      if (!fileInput.files[0]) return;
+
+      btn.innerText = "جاري ضغط الصورة والرفع...";
       btn.disabled = true;
 
-      const reader = new FileReader();
-      reader.onload = async function(event) {
-        const imageData = event.target.result;
-        products.push({ title, price, image: imageData });
-        
+      compressImage(fileInput.files[0], async function(compressedImage) {
+        products.push({ title, price, image: compressedImage });
         await updateGitHubProducts();
         document.getElementById('productForm').reset();
         renderAdminList();
         btn.innerText = "حفظ ونشر المنتج";
         btn.disabled = false;
-      };
-
-      if (fileInput.files[0]) {
-        reader.readAsDataURL(fileInput.files[0]);
-      }
+      });
     });
 
     fetchProductsFromGitHub();
