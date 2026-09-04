@@ -94,7 +94,6 @@
         .btn-danger { background: var(--danger-color); color: #fff; }
         .btn-success { background: var(--success-color); color: #fff; }
 
-        /* جدول المنتجات في الإدارة */
         .table-responsive {
             overflow-x: auto;
         }
@@ -172,24 +171,25 @@
             <input type="hidden" id="editing-product-id">
             <div class="form-group">
                 <label>اسم المنتج:</label>
-                <input type="text" id="prod-name" class="form-control" placeholder="مثال: تيشرت أوفرسايز أسود">
+                <input type="text" id="prod-name" class="form-control" placeholder="مثال: Oversized T-Shirt">
             </div>
             <div class="form-group">
                 <label>سعر المنتج (ج.م):</label>
                 <input type="number" id="prod-price" class="form-control" placeholder="مثال: 350">
             </div>
             <div class="form-group">
-                <label>رابط الصورة (Image URL):</label>
-                <input type="text" id="prod-image" class="form-control" placeholder="انسخ رابط الصورة هنا">
+                <label>صورة المنتج (اختر من الجهاز):</label>
+                <input type="file" id="prod-image-file" class="form-control" accept="image/*">
+                <small style="color: #888; display: block; margin-top: 5px;">سيتم رفع الصورة مباشرة من جهازك.</small>
             </div>
             <div class="form-group">
                 <label>الفئة (التصنيف):</label>
                 <select id="prod-category" class="form-control">
-                    <option value="tshirt">تيشرتات</option>
-                    <option value="pants">بنطلونات</option>
-                    <option value="hoodie">هوديز</option>
-                    <option value="shorts">شورتات</option>
-                    <option value="suits">بدلات (سوتس)</option>
+                    <option value="tshirt">T-Shirts</option>
+                    <option value="pants">Pants</option>
+                    <option value="hoodie">Hoodies</option>
+                    <option value="shorts">Shorts</option>
+                    <option value="suits">Suits</option>
                 </select>
             </div>
             <div class="form-group">
@@ -270,22 +270,50 @@
             } catch(e) { console.error(e); }
         }
 
+        // تحويل الصورة المرفوعة من الجهاز إلى Base64 لكي تخزن وتظهر مباشرة
+        function convertImageToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
         window.saveProduct = async function() {
             const id = document.getElementById("editing-product-id").value;
             const name = document.getElementById("prod-name").value.trim();
             const price = Number(document.getElementById("prod-price").value);
-            const image = document.getElementById("prod-image").value.trim();
+            const imageFile = document.getElementById("prod-image-file").files[0];
             const category = document.getElementById("prod-category").value;
             const description = document.getElementById("prod-desc").value.trim();
 
-            if (!name || !price || !image) {
-                alert("يرجى إكمال الحقول الأساسية (الاسم، السعر، ورابط الصورة).");
+            if (!name || !price) {
+                alert("يرجى إكمال الحقول الأساسية (الاسم والسعر).");
                 return;
             }
 
-            const productData = { name, price, image, category, description };
-
             try {
+                let imageURL = "";
+                // لو المستخدم اختر صورة جديدة من جهازه
+                if (imageFile) {
+                    imageURL = await convertImageToBase64(imageFile);
+                } else if (!id) {
+                    // لو بضيف منتج جديد ومش معاه صورة
+                    alert("يرجى اختيار صورة للمنتج من الجهاز.");
+                    return;
+                }
+
+                // لو بنعدل منتج ومش عاوزين نغير صورته القديمة
+                if (id && !imageFile) {
+                    const oldDocSnap = await getDoc(doc(db, "products", id));
+                    if (oldDocSnap.exists()) {
+                        imageURL = oldDocSnap.data().image;
+                    }
+                }
+
+                const productData = { name, price, image: imageURL, category, description };
+
                 if (id) {
                     await updateDoc(doc(db, "products", id), productData);
                     alert("تم تعديل المنتج بنجاح!");
@@ -313,23 +341,16 @@
                 let html = "";
                 snapshot.forEach(docSnap => {
                     const p = docSnap.data();
-                    const catNameMap = {
-                        'tshirt': 'تيشرتات',
-                        'pants': 'بنطلونات',
-                        'hoodie': 'هوديز',
-                        'shorts': 'شورتات',
-                        'suits': 'بدلات (سوتس)'
-                    };
                     html += `
                         <tr>
                             <td><img src="${p.image || ''}" alt=""></td>
                             <td>${p.name}</td>
                             <td>${p.price} ج.م</td>
-                            <td>${catNameMap[p.category] || p.category}</td>
+                            <td>${p.category}</td>
                             <td>
                                 <div class="actions-cell">
                                     <button class="action-btn btn-success" onclick="quickUpdatePrice('${docSnap.id}', ${p.price})">تعديل السعر</button>
-                                    <button class="action-btn btn" onclick="editProduct('${docSnap.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.image}', '${p.category}', '${(p.description || '').replace(/'/g, "\\'")}')">تعديل الكل</button>
+                                    <button class="action-btn btn" onclick="editProduct('${docSnap.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.category}', '${(p.description || '').replace(/'/g, "\\'")}')">تعديل الكل</button>
                                     <button class="action-btn btn-danger" onclick="deleteProduct('${docSnap.id}')">حذف</button>
                                 </div>
                             </td>
@@ -343,10 +364,9 @@
             }
         }
 
-        // دالة لتعديل السعر بسرعة من الجدول مباشرة
         window.quickUpdatePrice = async function(id, currentPrice) {
             const newPriceStr = prompt("أدخل السعر الجديد للمنتج (ج.م):", currentPrice);
-            if (newPriceStr === null) return; // لو المستخدم عمل إلغاء
+            if (newPriceStr === null) return;
 
             const newPrice = Number(newPriceStr);
             if (isNaN(newPrice) || newPrice <= 0) {
@@ -364,12 +384,10 @@
             }
         }
 
-        window.editProduct = function(id, name, price, image, category, description) {
-            document.getElementById("editing-product-id").value;
+        window.editProduct = function(id, name, price, category, description) {
             document.getElementById("editing-product-id").value = id;
             document.getElementById("prod-name").value = name;
             document.getElementById("prod-price").value = price;
-            document.getElementById("prod-image").value = image;
             document.getElementById("prod-category").value = category;
             document.getElementById("prod-desc").value = description;
 
@@ -380,15 +398,17 @@
         }
 
         window.cancelEdit = function() {
+            document.getElementById("editing-product-id->value")
             document.getElementById("editing-product-id").value = "";
             document.getElementById("prod-name").value = "";
             document.getElementById("prod-price").value = "";
-            document.getElementById("prod-image").value = "";
+            document.getElementById("prod-image-file").value = "";
             document.getElementById("prod-category").value = "tshirt";
             document.getElementById("prod-desc").value = "";
 
             document.getElementById("form-section-title").textContent = "إضافة منتج جديد";
             document.getElementById("save-product-btn").textContent = "إضافة المنتج";
+            document.getElementById("cancel-edit-dfhn")
             document.getElementById("cancel-edit-btn").style.display = "none";
         }
 
