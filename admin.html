@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم الشاملة - متجر دكن</title>
-    <!-- استدعاء خط Cairo العربي الفخم -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -32,23 +31,11 @@
             border-radius: 16px;
             border: 1px solid var(--border-color);
             box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-            animation: fadeIn 0.6s ease-in-out;
         }
-        h2, h3 {
-            text-align: center;
-            color: var(--accent-color);
-            letter-spacing: 1px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #ccc;
-        }
-        input[type="text"], input[type="number"], input[type="password"], input[type="file"], textarea {
+        h2, h3 { text-align: center; color: var(--accent-color); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #ccc; }
+        input[type="text"], input[type="number"], input[type="password"], input[type="file"], select, textarea {
             width: 100%;
             padding: 12px;
             background-color: #262626;
@@ -58,28 +45,11 @@
             box-sizing: border-box;
             outline: none;
             font-family: 'Cairo', sans-serif;
-            transition: border-color 0.2s;
         }
-        input:focus, textarea:focus {
-            border-color: var(--accent-color);
-        }
-        textarea {
-            resize: vertical;
-            height: 90px;
-        }
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            cursor: pointer;
-        }
-        .checkbox-group input {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--accent-color);
-            cursor: pointer;
-        }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-color); }
+        textarea { height: 80px; resize: vertical; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer; }
+        .checkbox-group input { width: 20px; height: 20px; accent-color: var(--accent-color); }
         button {
             width: 100%;
             padding: 14px;
@@ -91,127 +61,78 @@
             font-weight: 700;
             font-family: 'Cairo', sans-serif;
             cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
+            transition: background 0.2s;
         }
-        button:hover {
-            background-color: #e5b282;
-            transform: translateY(-2px);
-        }
-        #status, #promo-status {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: 600;
-        }
-        hr {
-            border: 0;
-            height: 1px;
-            background: var(--border-color);
-            margin: 40px 0;
-        }
-        /* جدول إدارة المنتجات */
-        .product-manage-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-left: 5px;
-        }
-        .manage-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #222;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #333;
-        }
-        .manage-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .manage-info img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-        .manage-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .btn-delete {
-            background-color: var(--danger-color);
-            color: white;
-            padding: 8px 14px;
-            font-size: 0.9rem;
-            border-radius: 8px;
-            width: auto;
-        }
-        .btn-edit {
-            background-color: var(--edit-color);
-            color: #fff;
-            padding: 8px 14px;
-            font-size: 0.9rem;
-            border-radius: 8px;
-            width: auto;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        button:hover { background-color: #e5b282; }
+        #status, #promo-status { text-align: center; margin-top: 15px; font-weight: 600; }
+        hr { border: 0; height: 1px; background: var(--border-color); margin: 40px 0; }
+        .product-manage-list { display: flex; flex-direction: column; gap: 15px; max-height: 400px; overflow-y: auto; }
+        .manage-item { display: flex; align-items: center; justify-content: space-between; background: #222; padding: 12px 15px; border-radius: 10px; border: 1px solid #333; }
+        .manage-info { display: flex; align-items: center; gap: 15px; }
+        .manage-info img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
+        .manage-actions { display: flex; gap: 10px; }
+        .btn-delete { background-color: var(--danger-color); color: white; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; }
+        .btn-edit { background-color: var(--edit-color); color: #fff; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="admin-container">
-        <h2>لوحة تحكم متجر داكن</h2>
+        <h2>لوحة تحكم متجر دكن</h2>
         
-        <!-- قسم إدارة العروض والخصومات -->
+        <!-- إدارة العروض -->
         <div style="background: #222; padding: 20px; border-radius: 12px; border: 1px solid #333; margin-bottom: 30px;">
             <h3>إدارة العروض الترويجية 🔥</h3>
             <form id="promo-form">
                 <div class="form-group">
-                    <label for="admin-pass-promo">كلمة سر الأدمن للتأكيد:</label>
-                    <input type="password" id="admin-pass-promo" required placeholder="أدخل كلمة المرور السرية">
+                    <label>كلمة سر الأدمن:</label>
+                    <input type="password" id="admin-pass-promo" required placeholder="كلمة المرور">
                 </div>
                 <div class="form-group">
-                    <label for="promo-title-input">عنوان العرض:</label>
-                    <input type="text" id="promo-title-input" placeholder="مثال: خصم 20% لفترة محدودة على التصوير">
+                    <label>عنوان العرض:</label>
+                    <input type="text" id="promo-title-input" placeholder="مثال: خصم خاص لفترة محدودة">
                 </div>
                 <div class="form-group">
-                    <label for="promo-desc-input">تفاصيل العرض:</label>
-                    <textarea id="promo-desc-input" placeholder="اكتب تفاصيل العرض هنا ليقرأها العميل..."></textarea>
+                    <label>تفاصيل العرض:</label>
+                    <textarea id="promo-desc-input" placeholder="تفاصيل العرض..."></textarea>
                 </div>
                 <label class="checkbox-group">
                     <input type="checkbox" id="promo-active-checkbox">
-                    <span>تفعيل ظهور العرض في المتجر الآن</span>
+                    <span>تفعيل ظهور العرض في المتجر</span>
                 </label>
-                <button type="submit" style="background-color: #4facfe; color: white;">حفظ وتحديث العرض</button>
+                <button type="submit" style="background-color: #4facfe; color: white;">حفظ العرض</button>
             </form>
             <div id="promo-status"></div>
         </div>
 
         <hr>
 
-        <!-- نموذج إضافة منتج جديد -->
-        <h3>إضافة منتج جديد</h3>
+        <!-- إضافة منتج جديد مع اختيار القسم بالإنجليزية -->
+        <h3>إضافة منتج جديد وتصنيفه</h3>
         <form id="product-form">
             <div class="form-group">
-                <label for="admin-pass">كلمة سر الأدمن:</label>
-                <input type="password" id="admin-pass" required placeholder="أدخل كلمة المرور السرية">
+                <label>كلمة سر الأدمن:</label>
+                <input type="password" id="admin-pass" required placeholder="كلمة المرور">
             </div>
             <div class="form-group">
-                <label for="p-name">اسم المنتج:</label>
-                <input type="text" id="p-name" required placeholder="أدخل اسم المنتج">
+                <label>اسم المنتج:</label>
+                <input type="text" id="p-name" required placeholder="اسم المنتج">
             </div>
             <div class="form-group">
-                <label for="p-price">السعر (ج.م):</label>
-                <input type="number" id="p-price" required placeholder="أدخل السعر">
+                <label>السعر (ج.م):</label>
+                <input type="number" id="p-price" required placeholder="السعر">
             </div>
             <div class="form-group">
-                <label for="p-image">صورة المنتج من الجهاز مباشرة:</label>
+                <label>اختر القسم (التصنيف):</label>
+                <select id="p-category" required>
+                    <option value="tshirt">T-Shirts</option>
+                    <option value="pants">Pants</option>
+                    <option value="hoodie">Hoodies</option>
+                    <option value="shorts">Shorts</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>صورة المنتج:</label>
                 <input type="file" id="p-image" accept="image/*" required>
             </div>
             <button type="submit" id="save-btn">حفظ وإضافة المنتج</button>
@@ -220,14 +141,12 @@
 
         <hr>
 
-        <!-- قسم إدارة المنتجات (حذف أو تعديل) -->
-        <h3>إدارة المنتجات الحالية (حذف / تعديل)</h3>
+        <h3>إدارة المنتجات الحالية</h3>
         <div id="manage-container" class="product-manage-list">
-            <div style="text-align: center; color: #888;">جاري تحميل المنتجات لإدارتها...</div>
+            <div style="text-align: center; color: #888;">جاري التحميل...</div>
         </div>
     </div>
 
-    <!-- كود فايربيس للإدارة الكاملة والعروض -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -244,17 +163,8 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const CORRECT_PASSWORD = "12345";
 
-        const form = document.getElementById("product-form");
-        const statusDiv = document.getElementById("status");
-        const manageContainer = document.getElementById("manage-container");
-        
-        const promoForm = document.getElementById("promo-form");
-        const promoStatus = document.getElementById("promo-status");
-
-        const CORRECT_PASSWORD = "12345"; // كلمة المرور السرية
-
-        // دالة ضغط الصور
         const compressAndConvertImage = (file) => {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -264,21 +174,12 @@
                     img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800;
-                        const MAX_HEIGHT = 800;
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > height) {
-                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                        } else {
-                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
+                        let width = img.width, height = img.height;
+                        const MAX = 800;
+                        if (width > height && width > MAX) { height *= MAX / width; width = MAX; }
+                        else if (height > MAX) { width *= MAX / height; height = MAX; }
+                        canvas.width = width; canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
                         resolve(canvas.toDataURL('image/jpeg', 0.7));
                     };
                     img.onerror = reject;
@@ -287,186 +188,98 @@
             });
         };
 
-        // تحميل بيانات العرض الحالي في لوحة التحكم عند الفتح
-        async function loadCurrentPromo() {
-            try {
-                const promoRef = doc(db, "settings", "promo");
-                const snap = await getDoc(promoRef);
-                if (snap.exists()) {
-                    const data = snap.data();
-                    document.getElementById("promo-title-input").value = data.title || "";
-                    document.getElementById("promo-desc-input").value = data.description || "";
-                    document.getElementById("promo-active-checkbox").checked = data.isActive || false;
-                }
-            } catch (err) {
-                console.error("خطأ في تحميل العرض:", err);
+        async function loadPromo() {
+            const snap = await getDoc(doc(db, "settings", "promo"));
+            if (snap.exists()) {
+                document.getElementById("promo-title-input").value = snap.data().title || "";
+                document.getElementById("promo-desc-input").value = snap.data().description || "";
+                document.getElementById("promo-active-checkbox").checked = snap.data().isActive || false;
             }
         }
-        loadCurrentPromo();
+        loadPromo();
 
-        // حفظ وتحديث العرض
-        promoForm.addEventListener("submit", async (e) => {
+        document.getElementById("promo-form").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const pass = document.getElementById("admin-pass-promo").value;
-            if (pass !== CORRECT_PASSWORD) {
-                promoStatus.style.color = "#ff5252";
-                promoStatus.textContent = "كلمة المرور السرية غير صحيحة!";
-                return;
+            if (document.getElementById("admin-pass-promo").value !== CORRECT_PASSWORD) {
+                alert("كلمة المرور غير صحيحة!"); return;
             }
-
-            const title = document.getElementById("promo-title-input").value;
-            const description = document.getElementById("promo-desc-input").value;
-            const isActive = document.getElementById("promo-active-checkbox").checked;
-
-            try {
-                promoStatus.style.color = "#aaa";
-                promoStatus.textContent = "جاري حفظ العرض...";
-
-                await setDoc(doc(db, "settings", "promo"), {
-                    title,
-                    description,
-                    isActive
-                });
-
-                promoStatus.style.color = "#4ade80";
-                promoStatus.textContent = "تم تحديث وعرض الحالة بنجاح 🚀";
-            } catch (err) {
-                console.error(err);
-                promoStatus.style.color = "#ff5252";
-                promoStatus.textContent = "حدث خطأ أثناء الحفظ.";
-            }
+            await setDoc(doc(db, "settings", "promo"), {
+                title: document.getElementById("promo-title-input").value,
+                description: document.getElementById("promo-desc-input").value,
+                isActive: document.getElementById("promo-active-checkbox").checked
+            });
+            document.getElementById("promo-status").style.color = "#4ade80";
+            document.getElementById("promo-status").textContent = "تم تحديث العرض بنجاح!";
         });
 
-        // 1. إضافة منتج جديد
-        form.addEventListener("submit", async (e) => {
+        document.getElementById("product-form").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const enteredPass = document.getElementById("admin-pass").value;
-            if (enteredPass !== CORRECT_PASSWORD) {
-                statusDiv.style.color = "#ff5252";
-                statusDiv.textContent = "كلمة المرور السرية غير صحيحة!";
-                return;
+            if (document.getElementById("admin-pass").value !== CORRECT_PASSWORD) {
+                alert("كلمة المرور غير صحيحة!"); return;
             }
 
             const btn = document.getElementById("save-btn");
             btn.disabled = true;
-            statusDiv.style.color = "#aaa";
-            statusDiv.textContent = "جاري رفع المنتج وحفظه...";
-
-            const name = document.getElementById("p-name").value;
-            const price = document.getElementById("p-price").value;
-            const imageFile = document.getElementById("p-image").files[0];
+            document.getElementById("status").textContent = "جاري الحفظ...";
 
             try {
-                let imageBase64 = "";
-                if (imageFile) {
-                    imageBase64 = await compressAndConvertImage(imageFile);
-                }
+                const imageFile = document.getElementById("p-image").files[0];
+                const imageBase64 = imageFile ? await compressAndConvertImage(imageFile) : "";
 
                 await addDoc(collection(db, "products"), {
-                    name: name,
-                    price: Number(price),
+                    name: document.getElementById("p-name").value,
+                    price: Number(document.getElementById("p-price").value),
+                    category: document.getElementById("p-category").value,
                     image: imageBase64,
                     createdAt: new Date()
                 });
 
-                statusDiv.style.color = "#4ade80";
-                statusDiv.textContent = "تم إضافة المنتج بنجاح 🚀";
-                form.reset();
-                loadManageProducts();
-            } catch (error) {
-                console.error("خطأ:", error);
-                statusDiv.style.color = "#ff5252";
-                statusDiv.textContent = "حدث خطأ، تأكد من الاتصال.";
-            } finally {
-                btn.disabled = false;
-            }
+                document.getElementById("status").style.color = "#4ade80";
+                document.getElementById("status").textContent = "تم إضافة المنتج بنجاح!";
+                e.target.reset();
+                loadManage();
+            } catch(err) {
+                document.getElementById("status").style.color = "#ff5252";
+                document.getElementById("status").textContent = "حدث خطأ أثناء الحفظ.";
+            } finally { btn.disabled = false; }
         });
 
-        // 2. عرض المنتجات للإدارة
-        async function loadManageProducts() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "products"));
-                manageContainer.innerHTML = "";
+        async function loadManage() {
+            const container = document.getElementById("manage-container");
+            const snapshot = await getDocs(collection(db, "products"));
+            container.innerHTML = "";
+            if (snapshot.empty) { container.innerHTML = `<div style="text-align:center;color:#888;">لا توجد منتجات.</div>`; return; }
 
-                if (querySnapshot.empty) {
-                    manageContainer.innerHTML = `<div style="text-align: center; color: #888;">لا توجد منتجات حالياً.</div>`;
-                    return;
-                }
-
-                querySnapshot.forEach((docItem) => {
-                    const p = docItem.data();
-                    const id = docItem.id;
-
-                    const itemDiv = document.createElement("div");
-                    itemDiv.className = "manage-item";
-                    itemDiv.innerHTML = `
-                        <div class="manage-info">
-                            <img src="${p.image || ''}" alt="">
-                            <div>
-                                <div style="font-weight: 700; color: #fff;">${p.name}</div>
-                                <div style="color: var(--accent-color); font-size: 0.9rem;">${p.price} ج.م</div>
-                            </div>
+            snapshot.forEach(docItem => {
+                const p = docItem.data();
+                const id = docItem.id;
+                const div = document.createElement("div");
+                div.className = "manage-item";
+                div.innerHTML = `
+                    <div class="manage-info">
+                        <img src="${p.image || ''}" alt="">
+                        <div>
+                            <div style="font-weight:700;color:#fff;">${p.name}</div>
+                            <div style="color:var(--accent-color);font-size:0.85rem;">${p.price} ج.م | (${p.category || 'عام'})</div>
                         </div>
-                        <div class="manage-actions">
-                            <button class="btn-edit" onclick="editProduct('${id}', '${p.name}', '${p.price}')">تعديل</button>
-                            <button class="btn-delete" onclick="deleteProduct('${id}')">حذف</button>
-                        </div>
-                    `;
-                    manageContainer.appendChild(itemDiv);
-                });
-            } catch (error) {
-                console.error(error);
-                manageContainer.innerHTML = `<div style="text-align: center; color: #ff5252;">فشل تحميل قائمة المنتجات.</div>`;
+                    </div>
+                    <div class="manage-actions">
+                        <button class="btn-delete" onclick="deleteProduct('${id}')">حذف</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.deleteProduct = async (id) => {
+            if (prompt("أدخل كلمة المرور للتأكيد:") !== CORRECT_PASSWORD) { alert("كلمة المرور خطأ!"); return; }
+            if (confirm("هل تريد حذف هذا المنتج؟")) {
+                await deleteDoc(doc(db, "products", id));
+                loadManage();
             }
         }
 
-        // 3. حذف منتج
-        window.deleteProduct = async (id) => {
-            const enteredPass = prompt("أدخل كلمة المرور السرية لتأكيد الحذف:");
-            if (enteredPass !== CORRECT_PASSWORD) {
-                alert("كلمة المرور غير صحيحة!");
-                return;
-            }
-
-            if (confirm("هل أنت متأكد من حذف هذا المنتج نهائياً؟")) {
-                try {
-                    await deleteDoc(doc(db, "products", id));
-                    alert("تم حذف المنتج بنجاح!");
-                    loadManageProducts();
-                } catch (error) {
-                    alert("حدث خطأ أثناء الحذف.");
-                }
-            }
-        };
-
-        // 4. تعديل منتج
-        window.editProduct = async (id, oldName, oldPrice) => {
-            const enteredPass = prompt("أدخل كلمة المرور السرية للتعديل:");
-            if (enteredPass !== CORRECT_PASSWORD) {
-                alert("كلمة المرور غير صحيحة!");
-                return;
-            }
-
-            const newName = prompt("أدخل الاسم الجديد للمنتج:", oldName);
-            if (newName === null) return;
-
-            const newPrice = prompt("أدخل السعر الجديد للمنتج:", oldPrice);
-            if (newPrice === null) return;
-
-            try {
-                const productRef = doc(db, "products", id);
-                await updateDoc(productRef, {
-                    name: newName,
-                    price: Number(newPrice)
-                });
-                alert("تم تحديث البيانات بنجاح!");
-                loadManageProducts();
-            } catch (error) {
-                alert("حدث خطأ أثناء التعديل.");
-            }
-        };
-
-        loadManageProducts();
+        loadManage();
     </script>
 </body>
 </html>
