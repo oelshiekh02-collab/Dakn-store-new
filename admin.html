@@ -7,13 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --text-color: #f5f5f5;
-            --accent-color: #d4a373;
-            --border-color: #333333;
-            --danger-color: #ff5252;
-            --success-color: #25d366;
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --text-color: #000000;
+            --border-color: #dddddd;
+            --gray-light: #f9f9f9;
         }
         body {
             font-family: 'Cairo', sans-serif;
@@ -27,7 +25,7 @@
             margin-bottom: 30px;
         }
         h1 {
-            color: var(--accent-color);
+            color: var(--text-color);
             font-size: 2rem;
             margin-bottom: 5px;
         }
@@ -38,14 +36,14 @@
         .admin-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
+            border-radius: 10px;
             padding: 20px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         }
         .admin-card h2 {
             font-size: 1.2rem;
-            color: var(--accent-color);
+            color: var(--text-color);
             margin-top: 0;
             margin-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
@@ -57,42 +55,43 @@
         .form-group label {
             display: block;
             font-size: 0.9rem;
-            color: #ccc;
+            color: #444;
             margin-bottom: 5px;
+            font-weight: 600;
         }
         .form-control {
             width: 100%;
-            background: #111;
+            background: #fff;
             border: 1px solid var(--border-color);
-            color: #fff;
+            color: #000;
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 6px;
             font-family: 'Cairo', sans-serif;
             font-size: 0.95rem;
             box-sizing: border-box;
             outline: none;
         }
         .form-control:focus {
-            border-color: var(--accent-color);
+            border-color: #000;
         }
         textarea.form-control {
             resize: vertical;
             min-height: 80px;
         }
         .btn {
-            background: var(--accent-color);
-            color: #0f0f0f;
+            background: #000;
+            color: #fff;
             border: none;
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 700;
             font-family: 'Cairo', sans-serif;
             cursor: pointer;
             transition: opacity 0.2s;
         }
-        .btn:hover { opacity: 0.9; }
-        .btn-danger { background: var(--danger-color); color: #fff; }
-        .btn-success { background: var(--success-color); color: #fff; }
+        .btn:hover { opacity: 0.8; }
+        .btn-danger { background: #ff4d4d; color: #fff; }
+        .btn-success { background: #000; color: #fff; }
 
         .table-responsive {
             overflow-x: auto;
@@ -107,12 +106,12 @@
             padding: 10px;
             border-bottom: 1px solid var(--border-color);
         }
-        th { color: var(--accent-color); font-weight: 700; }
+        th { color: #000; font-weight: 700; }
         td img {
             width: 40px;
             height: 40px;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 4px;
         }
         .actions-cell {
             display: flex;
@@ -122,15 +121,18 @@
         .action-btn {
             padding: 5px 10px;
             font-size: 0.8rem;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            border: none;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #000;
             font-family: 'Cairo', sans-serif;
             font-weight: 600;
         }
+        .action-btn:hover { background: #eee; }
         .back-link {
             display: inline-block;
-            color: var(--accent-color);
+            color: var(--text-color);
             text-decoration: none;
             font-weight: 700;
             margin-bottom: 15px;
@@ -145,25 +147,6 @@
             <h1>لوحة التحكم - متجر دكن</h1>
             <p>إدارة المنتجات، العروض، والفئات بسهولة</p>
         </header>
-
-        <!-- قسم إدارة العرض الترويجي -->
-        <div class="admin-card">
-            <h2>إدارة شريط العروض الترويجية</h2>
-            <div class="form-group">
-                <label>عنوان العرض:</label>
-                <input type="text" id="promo-title-input" class="form-control" placeholder="مثال: خصم العيد الكبرى!">
-            </div>
-            <div class="form-group">
-                <label>نص العرض والتفاصيل:</label>
-                <textarea id="promo-desc-input" class="form-control" placeholder="اكتب تفاصيل العرض هنا..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" id="promo-active-input"> تفعيل وإظهار شريط العروض في المتجر
-                </label>
-            </div>
-            <button class="btn btn-success" onclick="savePromoSettings()">حفظ وتحديث العرض</button>
-        </div>
 
         <!-- قسم إضافة / تعديل منتج -->
         <div class="admin-card">
@@ -180,7 +163,7 @@
             <div class="form-group">
                 <label>صورة المنتج (اختر من الجهاز):</label>
                 <input type="file" id="prod-image-file" class="form-control" accept="image/*">
-                <small style="color: #888; display: block; margin-top: 5px;">سيتم رفع الصورة مباشرة من جهازك.</small>
+                <small style="color: #666; display: block; margin-top: 5px;">سيتم رفع الصورة مباشرة من جهازك.</small>
             </div>
             <div class="form-group">
                 <label>الفئة (التصنيف):</label>
@@ -224,7 +207,15 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // حماية صفحة الإدارة بكلمة سر (يمكنك تغيير "12345" بالكلمة التي تعجبك)
+        const ADMIN_PASSWORD = "12345";
+        const enteredPassword = prompt("أدخل كلمة سر لوحة التحكم:");
+        if (enteredPassword !== ADMIN_PASSWORD) {
+            alert("كلمة السر غير صحيحة!");
+            window.location.href = "index.html";
+        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyAeCLqtBvTvk430tgAIBRLu_r7nCFKu4ao",
@@ -240,37 +231,9 @@
         const db = getFirestore(app);
 
         async function initAdmin() {
-            await loadPromoSettings();
             await loadAdminProducts();
         }
 
-        window.savePromoSettings = async function() {
-            const title = document.getElementById("promo-title-input").value.trim();
-            const description = document.getElementById("promo-desc-input").value.trim();
-            const isActive = document.getElementById("promo-active-input").checked;
-
-            try {
-                await setDoc(doc(db, "settings", "promo"), { title, description, isActive });
-                alert("تم تحديث شريط العروض بنجاح!");
-            } catch (err) {
-                console.error(err);
-                alert("حدث خطأ أثناء حفظ شريط العروض.");
-            }
-        }
-
-        async function loadPromoSettings() {
-            try {
-                const snap = await getDoc(doc(db, "settings", "promo"));
-                if (snap.exists()) {
-                    const data = snap.data();
-                    document.getElementById("promo-title-input").value = data.title || "";
-                    document.getElementById("promo-desc-input").value = data.description || "";
-                    document.getElementById("promo-active-input").checked = !!data.isActive;
-                }
-            } catch(e) { console.error(e); }
-        }
-
-        // تحويل الصورة المرفوعة من الجهاز إلى Base64 لكي تخزن وتظهر مباشرة
         function convertImageToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -295,16 +258,13 @@
 
             try {
                 let imageURL = "";
-                // لو المستخدم اختر صورة جديدة من جهازه
                 if (imageFile) {
                     imageURL = await convertImageToBase64(imageFile);
                 } else if (!id) {
-                    // لو بضيف منتج جديد ومش معاه صورة
                     alert("يرجى اختيار صورة للمنتج من الجهاز.");
                     return;
                 }
 
-                // لو بنعدل منتج ومش عاوزين نغير صورته القديمة
                 if (id && !imageFile) {
                     const oldDocSnap = await getDoc(doc(db, "products", id));
                     if (oldDocSnap.exists()) {
@@ -349,9 +309,9 @@
                             <td>${p.category}</td>
                             <td>
                                 <div class="actions-cell">
-                                    <button class="action-btn btn-success" onclick="quickUpdatePrice('${docSnap.id}', ${p.price})">تعديل السعر</button>
-                                    <button class="action-btn btn" onclick="editProduct('${docSnap.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.category}', '${(p.description || '').replace(/'/g, "\\'")}')">تعديل الكل</button>
-                                    <button class="action-btn btn-danger" onclick="deleteProduct('${docSnap.id}')">حذف</button>
+                                    <button class="action-btn" onclick="quickUpdatePrice('${docSnap.id}', ${p.price})">تعديل السعر</button>
+                                    <button class="action-btn" onclick="editProduct('${docSnap.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.category}', '${(p.description || '').replace(/'/g, "\\'")}')">تعديل الكل</button>
+                                    <button class="action-btn" style="color: #ff4d4d; border-color: #ff4d4d;" onclick="deleteProduct('${docSnap.id}')">حذف</button>
                                 </div>
                             </td>
                         </tr>
@@ -360,7 +320,7 @@
                 tbody.innerHTML = html;
             } catch (err) {
                 console.error(err);
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--danger-color);">تعذر تحميل المنتجات.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">تعذر تحميل المنتجات.</td></tr>`;
             }
         }
 
@@ -398,7 +358,6 @@
         }
 
         window.cancelEdit = function() {
-            document.getElementById("editing-product-id->value")
             document.getElementById("editing-product-id").value = "";
             document.getElementById("prod-name").value = "";
             document.getElementById("prod-price").value = "";
@@ -408,7 +367,6 @@
 
             document.getElementById("form-section-title").textContent = "إضافة منتج جديد";
             document.getElementById("save-product-btn").textContent = "إضافة المنتج";
-            document.getElementById("cancel-edit-dfhn")
             document.getElementById("cancel-edit-btn").style.display = "none";
         }
 
