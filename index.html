@@ -263,6 +263,22 @@
         }
         .btn-outline:hover { background: var(--text-color); color: #fff; }
 
+        /* Show More Link Style */
+        .show-more-link {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .show-more-link:hover { opacity: 0.7; }
+
         /* Product Details Page */
         .product-detail-container {
             display: grid;
@@ -389,7 +405,7 @@
                 <input type="text" id="search-input" placeholder="Search...">
             </div>
         </div>
-        <a href="index.html" class="brand-name">DAKN</a>
+        <a href="#" onclick="initStore(); return false;" class="brand-name">DAKN</a>
         <div class="header-right">
             <button class="icon-btn" onclick="toggleCart()">
                 <i class="fa-solid fa-bag-shopping"></i>
@@ -490,7 +506,7 @@
         let allProducts = [];
         let cart = JSON.parse(localStorage.getItem("dakn_cart")) || [];
 
-        async function initStore() {
+        window.initStore = async function() {
             try {
                 const snapshot = await getDocs(collection(db, "products"));
                 allProducts = [];
@@ -499,6 +515,7 @@
                 });
                 renderHomeGrid(allProducts);
                 updateCartBadge();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) {
                 console.error(err);
                 document.getElementById("dynamic-content").innerHTML = `<p style="text-align: center; color: red;">Failed to load products.</p>`;
@@ -520,7 +537,7 @@
                     <div class="products-grid">
             `;
 
-            products.slice(0, 8).forEach(p => {
+            products.slice(0, 4).forEach(p => {
                 html += `
                     <div class="product-card" onclick="openProductDetail('${p.id}')">
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
@@ -533,8 +550,8 @@
             });
 
             html += `</div>`;
-            if (products.length > 8) {
-                html += `<div style="text-align: center;"><button class="btn-outline" onclick="renderShopAll()">View All Products</button></div>`;
+            if (products.length > 4) {
+                html += `<div style="text-align: left;"><button class="show-more-link" onclick="renderShopAll()">Show More</button></div>`;
             }
             html += `</div>`;
             container.innerHTML = html;
@@ -817,6 +834,7 @@
 
             html += `</div></div>`;
             container.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         document.getElementById("search-input").addEventListener("input", function(e) {
