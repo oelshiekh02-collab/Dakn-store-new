@@ -20,104 +20,182 @@
             color: var(--text-color);
             margin: 0;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        .details-container {
-            max-width: 800px;
-            margin: 40px auto;
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        .back-home {
+            display: inline-block;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .product-details-container {
+            max-width: 900px;
+            margin: 0 auto;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            animation: fadeIn 0.6s ease-in-out;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
-        @media(max-width: 768px) {
-            .details-container { grid-template-columns: 1fr; }
+        @media(min-width: 768px) {
+            .product-details-container {
+                flex-direction: row;
+            }
         }
-        .product-img {
+        .product-image-box {
+            flex: 1;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px;
+        }
+        .product-image-box img {
             width: 100%;
-            height: 350px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 12px;
-            background-color: #222;
         }
-        .product-details-info h2 {
-            color: #fff;
-            margin-top: 0;
-            font-size: 1.8rem;
+        .product-info-box {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .price {
-            color: var(--accent-color);
+        .product-title {
             font-size: 1.5rem;
             font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .product-desc {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.6;
             margin-bottom: 20px;
         }
-        .section-label {
-            font-weight: 600;
-            color: #aaa;
-            margin-bottom: 8px;
-            display: block;
-        }
-        .sizes-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        .size-box {
+
+        /* صندوق الفورم والكمية */
+        .order-form-box {
+            background: #221f1b;
             border: 1px solid var(--border-color);
-            background: #222;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+        .form-control {
+            width: 100%;
+            background: #111;
+            border: 1px solid var(--border-color);
             color: #fff;
-            padding: 8px 15px;
+            padding: 10px;
             border-radius: 8px;
-            cursor: pointer;
             font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-            transition: all 0.2s;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            outline: none;
         }
-        .size-box.selected, .size-box:hover {
+        .form-control:focus {
             border-color: var(--accent-color);
-            background-color: #2e261f;
-            color: var(--accent-color);
         }
+        .form-control[readonly] {
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        /* عداد الكمية */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .qty-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .qty-btn:hover { background: #444; }
+        .qty-input {
+            flex: 1;
+            text-align: center;
+            font-weight: 700;
+        }
+
         .whatsapp-order-btn {
             display: block;
             width: 100%;
-            padding: 14px;
             background-color: var(--whatsapp-color);
             color: white;
             text-align: center;
+            padding: 12px;
+            border-radius: 10px;
             text-decoration: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
             font-weight: 700;
-            transition: background 0.2s, transform 0.1s;
-            box-sizing: border-box;
+            font-size: 1rem;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
-        .whatsapp-order-btn:hover { background-color: #20ba5a; transform: scale(1.02); }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
+        .whatsapp-order-btn:hover { opacity: 0.9; }
+
+        .loading, .error {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.1rem;
+            color: #888;
         }
-        .back-link:hover { text-decoration: underline; }
-        .loading { text-align: center; grid-column: 1 / -1; font-size: 1.3rem; color: #888; padding: 60px; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .error { color: #ff5252; }
     </style>
 </head>
 <body>
 
-    <div style="max-width: 800px; margin: 0 auto;">
-        <a href="index.html" class="back-link">← العودة إلى المتجر الرئيسي</a>
-    </div>
+    <header>
+        <a href="index.html" class="back-home">← العودة إلى المتجر الرئيسي</a>
+        <h1>متجر دكن</h1>
+    </header>
 
-    <div id="product-details-wrapper" class="details-container">
-        <div class="loading">جاري تحميل تفاصيل المنتج...</div>
-    </div>
+    <main>
+        <div id="product-root">
+            <div class="loading">جاري تحميل تفاصيل المنتج...</div>
+        </div>
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -137,15 +215,13 @@
         const db = getFirestore(app);
         const WHATSAPP_NUMBER = "201097597133";
 
-        let selectedSize = "M";
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get("id");
 
         async function fetchProductDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get('id');
-            const wrapper = document.getElementById("product-details-wrapper");
-
+            const root = document.getElementById("product-root");
             if (!productId) {
-                wrapper.innerHTML = `<div class="loading" style="color:#ff5252;">عذراً، لم يتم العثور على المنتج.</div>`;
+                root.innerHTML = `<div class="error">عذراً، لم يتم تحديد المنتج المطلوب.</div>`;
                 return;
             }
 
@@ -154,55 +230,108 @@
                 const docSnap = await getDoc(docRef);
 
                 if (!docSnap.exists()) {
-                    wrapper.innerHTML = `<div class="loading" style="color:#ff5252;">هذا المنتج غير موجود أو تم حذفه.</div>`;
+                    root.innerHTML = `<div class="error">المنتج غير موجود أو تم حذفه.</div>`;
                     return;
                 }
 
-                const p = docSnap.data();
+                const product = docSnap.data();
+                const productCode = product.code || productId.slice(0, 6).toUpperCase();
 
-                wrapper.innerHTML = `
-                    <div>
-                        <img src="${p.image || ''}" alt="${p.name}" class="product-img">
-                    </div>
-                    <div class="product-details-info">
-                        <h2>${p.name}</h2>
-                        <div class="price">${p.price} ج.م</div>
-                        
-                        <span class="section-label">اختر المقاس المناسب:</span>
-                        <div class="sizes-group" id="sizes-container">
-                            <button class="size-box" onclick="selectSize('S', this)">S</button>
-                            <button class="size-box selected" onclick="selectSize('M', this)">M</button>
-                            <button class="size-box" onclick="selectSize('L', this)">L</button>
-                            <button class="size-box" onclick="selectSize('XL', this)">XL</button>
-                            <button class="size-box" onclick="selectSize('XXL', this)">XXL</button>
+                root.innerHTML = `
+                    <div class="product-details-container">
+                        <div class="product-image-box">
+                            <img src="${product.image || ''}" alt="${product.name}">
                         </div>
+                        <div class="product-info-box">
+                            <div>
+                                <div class="product-title">${product.name}</div>
+                                <div class="product-price" id="display-price">${product.price} ج.م</div>
+                                <div class="product-desc">${product.description || 'لا توجد تفاصيل إضافية متاحة لهذا المنتج حالياً.'}</div>
+                            </div>
 
-                        <span class="section-label" style="margin-top: 15px;">إتمام الطلب:</span>
-                        <a id="wa-btn" href="#" target="_blank" class="whatsapp-order-btn">اطلب عبر الواتساب 💬</a>
+                            <div class="order-form-box">
+                                <div class="form-group">
+                                    <label>اسم المنتج (محدد تلقائياً):</label>
+                                    <input type="text" class="form-control" value="${product.name}" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>كود المنتج (محدد تلقائياً):</label>
+                                    <input type="text" class="form-control" value="${productCode}" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>عدد القطع (قابل للزيادة):</label>
+                                    <div class="quantity-control">
+                                        <button class="qty-btn" onclick="changeQuantity(-1, ${product.price})">-</button>
+                                        <input type="text" class="form-control qty-input" id="form-qty" value="1" readonly>
+                                        <button class="qty-btn" onclick="changeQuantity(1, ${product.price})">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>اسمك الكريم:</label>
+                                    <input type="text" class="form-control" id="customer-name" placeholder="اكتب اسمك هنا...">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>رقم الموبايل:</label>
+                                    <input type="tel" class="form-control" id="customer-phone" placeholder="اكتب رقم الموبايل للتواصل...">
+                                </div>
+
+                                <button class="whatsapp-order-btn" onclick="sendToWhatsApp('${product.name}', ${product.price}, '${productCode}')">
+                                    إتمام الطلب وإرساله عبر الواتساب 💬
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 `;
 
-                updateWhatsAppLink(p.name, p.price);
-
             } catch (err) {
                 console.error(err);
-                wrapper.innerHTML = `<div class="loading" style="color:#ff5252;">حدث خطأ أثناء تحميل تفاصيل المنتج.</div>`;
+                root.innerHTML = `<div class="error">حدث خطأ أثناء تحميل بيانات المنتج.</div>`;
             }
         }
 
-        window.selectSize = function(size, btn) {
-            selectedSize = size;
-            document.querySelectorAll(".size-box").forEach(b => b.classList.remove("selected"));
-            btn.classList.add("selected");
+        let currentQty = 1;
+
+        window.changeQuantity = function(change, unitPrice) {
+            currentQty += change;
+            if (currentQty < 1) currentQty = 1;
             
-            const name = document.querySelector(".product-details-info h2").textContent;
-            const price = document.querySelector(".price").textContent;
-            updateWhatsAppLink(name, price);
+            document.getElementById("form-qty").value = currentQty;
+            const totalPrice = currentQty * unitPrice;
+            document.getElementById("display-price").textContent = `${totalPrice} ج.م`;
         }
 
-        function updateWhatsAppLink(name, price) {
-            const message = encodeURIComponent(`مرحباً، أريد طلب هذا المنتج:\n- الاسم: ${name}\n- السعر: ${price}\n- المقاس المطلوب: ${selectedSize}`);
-            document.getElementById("wa-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+        window.sendToWhatsApp = function(productName, unitPrice, productCode) {
+            const customerName = document.getElementById("customer-name").value.trim();
+            const customerPhone = document.getElementById("customer-phone").value.trim();
+            
+            if (!customerName) {
+                alert("يرجى كتابة اسمك الكريم أولاً.");
+                document.getElementById("customer-name").focus();
+                return;
+            }
+
+            if (!customerPhone) {
+                alert("يرجى كتابة رقم الموبايل الخاص بك أولاً.");
+                document.getElementById("customer-phone").focus();
+                return;
+            }
+
+            const total = currentQty * unitPrice;
+
+            let message = `مرحباً، لدي طلب جديد من المتجر:\n\n`;
+            message += `👤 *اسم العميل:* ${customerName}\n`;
+            message += `📱 *رقم الموبايل:* ${customerPhone}\n\n`;
+            message += `👕 *المنتج:* ${productName}\n`;
+            message += `🏷️ *الكود:* ${productCode}\n`;
+            message += `📦 *الكمية:* ${currentQty} قطعة\n`;
+            message += `💰 *السعر الإجمالي:* ${total} ج.م`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
         }
 
         fetchProductDetails();
