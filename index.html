@@ -128,6 +128,68 @@
         .dropdown-item.social-ig { color: var(--instagram-color); }
         .dropdown-item.social-wa { color: var(--whatsapp-color); }
 
+        /* شريط العروض المصغر بدون زر واتساب */
+        .promo-banner {
+            background: linear-gradient(135deg, #2a2218, #1a1a1a);
+            border: 1px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 12px 20px;
+            max-width: 1160px;
+            margin: 0 auto 20px auto;
+            text-align: center;
+            display: none;
+            font-size: 0.95rem;
+        }
+        .promo-title { color: var(--accent-color); font-weight: 700; display: inline-block; margin-left: 10px; }
+        .promo-desc { color: #ddd; display: inline-block; }
+
+        /* شريط الفلاتر الحرفية البسيطة والمتحركة أفقياً */
+        .sub-categories-wrapper {
+            max-width: 1160px;
+            margin: 0 auto 20px auto;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+            scrollbar-width: none; /* إخفاء شريط التمرير لمتصفحات فايرفوكس */
+        }
+        .sub-categories-wrapper::-webkit-scrollbar {
+            display: none; /* إخفاء شريط التمرير لمتصفحات كروم وسفاري */
+        }
+        .sub-categories-bar {
+            display: inline-flex;
+            gap: 15px;
+            padding: 0 5px;
+        }
+        .sub-cat-item {
+            background: transparent;
+            border: none;
+            color: #888;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 5px 2px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .sub-cat-item:hover {
+            color: var(--text-color);
+        }
+        .sub-cat-item.active {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+        .sub-cat-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
         /* مربع البحث الاحترافي */
         .search-container {
             max-width: 600px;
@@ -149,30 +211,6 @@
         }
         .search-input:focus {
             border-color: var(--accent-color);
-        }
-
-        /* شريط العروض المصغر */
-        .promo-banner {
-            background: linear-gradient(135deg, #2a2218, #1a1a1a);
-            border: 1px solid var(--accent-color);
-            border-radius: 10px;
-            padding: 10px 15px;
-            max-width: 1160px;
-            margin: 0 auto 20px auto;
-            text-align: center;
-            display: none;
-            font-size: 0.95rem;
-        }
-        .promo-title { color: var(--accent-color); font-weight: 700; display: inline-block; margin-left: 10px; }
-        .promo-desc { color: #ddd; display: inline-block; margin-left: 10px; }
-        .promo-btn {
-            background-color: var(--whatsapp-color);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.85rem;
         }
 
         .section-header {
@@ -347,7 +385,7 @@
         
         <!-- القائمة المنسدلة -->
         <div id="side-dropdown" class="dropdown-menu">
-            <button class="dropdown-item" onclick="resetSearch(); toggleDropdown(event);">🏠 كل المنتجات</button>
+            <button class="dropdown-item" onclick="resetAllFilters(); toggleDropdown(event);">🏠 كل المنتجات</button>
             <a href="https://www.instagram.com/omar.____.elshikh" target="_blank" class="dropdown-item social-ig">📷 انستجرام المتجر</a>
             <a id="dropdown-wa-link" href="#" target="_blank" class="dropdown-item social-wa">📞 تواصل عبر الواتساب</a>
         </div>
@@ -356,11 +394,22 @@
         <p>الفخامة والأناقة في كل قطعة</p>
     </header>
 
-    <!-- شريط العروض المصغر -->
+    <!-- شريط العروض المصغر (بدون زر واتساب - كتابة فقط) -->
     <div id="promo-banner" class="promo-banner">
         <span id="promo-title" class="promo-title">عرض خاص!</span>
         <span id="promo-text" class="promo-desc">...</span>
-        <a id="promo-whatsapp-btn" href="#" target="_blank" class="promo-btn">اطلب العرض 💬</a>
+    </div>
+
+    <!-- شريط فلاتر التصنيفات الحرفية البسيطة (تتحرك أفقياً وتتفاعل مع النقر) -->
+    <div class="sub-categories-wrapper">
+        <div class="sub-categories-bar">
+            <button class="sub-cat-item active" onclick="filterBySubCategory('all', this)">الكل</button>
+            <button class="sub-cat-item" onclick="filterBySubCategory('tshirt', this)">تيشرتات</button>
+            <button class="sub-cat-item" onclick="filterBySubCategory('pants', this)">جينز وبنطلونات</button>
+            <button class="sub-cat-item" onclick="filterBySubCategory('hoodie', this)">هوديز</button>
+            <button class="sub-cat-item" onclick="filterBySubCategory('shorts', this)">شورتات</button>
+            <button class="sub-cat-item" onclick="filterBySubCategory('suits', this)">بدلات</button>
+        </div>
     </div>
 
     <!-- مربع البحث -->
@@ -514,6 +563,7 @@
         let allProducts = [];
         let limitView = true;
         let currentFilteredProducts = [];
+        let activeCategory = 'all';
 
         async function loadStore() {
             try {
@@ -522,7 +572,6 @@
                     const data = promoSnap.data();
                     document.getElementById("promo-title").textContent = data.title;
                     document.getElementById("promo-text").textContent = data.description;
-                    document.getElementById("promo-whatsapp-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=` + encodeURIComponent(`استفسار عن عرض: ${data.title}`);
                     document.getElementById("promo-banner").style.display = "block";
                 }
             } catch(e){ console.error(e); }
@@ -548,13 +597,12 @@
             container.innerHTML = "";
 
             if (products.length === 0) {
-                container.innerHTML = `<div class="loading">عذراً، لم نجد أي منتج مطابق لبحثك.</div>`;
+                container.innerHTML = `<div class="loading">عذراً، لم نجد أي منتج مطابق.</div>`;
                 showMoreWrapper.style.display = "none";
                 return;
             }
 
             let displayedProducts = products;
-            // لو العميل بيبحث، بنعرض النتيجة كاملة بدون قيد الأربعة منتجات عشان يشلاقي اللي بيدور عليه
             const isSearching = document.getElementById("search-input").value.trim() !== "";
             if (limitView && !isSearching && products.length > 4) {
                 displayedProducts = products.slice(0, 4);
@@ -584,19 +632,44 @@
             });
         }
 
-        window.handleSearch = function(query) {
-            const keyword = query.trim().toLowerCase();
-            if (keyword === "") {
-                limitView = true;
-                currentFilteredProducts = allProducts;
-            } else {
-                currentFilteredProducts = allProducts.filter(p => p.name.toLowerCase().includes(keyword));
+        // دمج البحث والتصنيف الحرفي معاً بسلاسة
+        function applyFilters() {
+            const keyword = document.getElementById("search-input").value.trim().toLowerCase();
+            
+            let temp = allProducts;
+            
+            // تصفية حسب التصنيف الحرفي
+            if (activeCategory !== 'all') {
+                temp = temp.filter(p => p.category === activeCategory);
             }
+            
+            // تصفية حسب كلمة البحث إن وجدت
+            if (keyword !== "") {
+                temp = temp.filter(p => p.name.toLowerCase().includes(keyword));
+            }
+
+            currentFilteredProducts = temp;
             renderProducts(currentFilteredProducts);
         }
 
-        window.resetSearch = function() {
+        window.filterBySubCategory = function(cat, btnElement) {
+            document.querySelectorAll(".sub-cat-item").forEach(el => el.classList.remove("active"));
+            btnElement.classList.add("active");
+            activeCategory = cat;
+            limitView = true;
+            applyFilters();
+        }
+
+        window.handleSearch = function(query) {
+            limitView = true;
+            applyFilters();
+        }
+
+        window.resetAllFilters = function() {
             document.getElementById("search-input").value = "";
+            activeCategory = 'all';
+            document.querySelectorAll(".sub-cat-item").forEach(el => el.classList.remove("active"));
+            document.querySelector(".sub-cat-item").classList.add("active");
             limitView = true;
             currentFilteredProducts = allProducts;
             renderProducts(currentFilteredProducts);
