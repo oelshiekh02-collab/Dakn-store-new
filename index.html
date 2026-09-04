@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>متجر دكن - Dakn</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,20 +13,21 @@
             --border-color: #e5e5e5;
             --gray-light: #f9f9f9;
         }
+        * { box-sizing: border-box; }
         body {
             font-family: 'Cairo', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            overflow-x: hidden;
         }
-        /* الشريط العلوي النظيف */
+        /* الشريط العلوي */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 30px;
+            padding: 15px 20px;
             border-bottom: 1px solid var(--border-color);
             background: #fff;
             position: sticky;
@@ -36,10 +37,10 @@
         .header-left, .header-right {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
         .brand-name {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             text-decoration: none;
             color: var(--text-color);
@@ -51,6 +52,7 @@
             font-size: 1.2rem;
             cursor: pointer;
             color: var(--text-color);
+            padding: 5px;
         }
         .search-box {
             display: flex;
@@ -58,23 +60,30 @@
             background: var(--gray-light);
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            padding: 5px 15px;
+            padding: 4px 12px;
+            max-width: 150px;
+        }
+        @media(min-width: 768px) {
+            .search-box { max-width: 250px; }
+            header { padding: 20px 40px; }
+            .brand-name { font-size: 1.5rem; }
         }
         .search-box input {
             border: none;
             background: transparent;
             outline: none;
             font-family: 'Cairo', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-color);
-            padding: 3px;
+            padding: 2px;
+            width: 100%;
         }
 
         /* القائمة الجانبية */
         .sidebar {
             position: fixed;
             top: 0;
-            right: -300px;
+            right: -100%;
             width: 280px;
             height: 100%;
             background: #fff;
@@ -86,7 +95,6 @@
             flex-direction: column;
             justify-content: space-between;
             padding: 30px 20px;
-            box-sizing: border-box;
         }
         .sidebar.open { right: 0; }
         .sidebar-header {
@@ -114,7 +122,6 @@
             display: block;
             transition: color 0.2s;
         }
-        .sidebar-links a:hover { color: #555; }
         .sidebar-footer {
             border-top: 1px solid var(--border-color);
             padding-top: 15px;
@@ -131,118 +138,166 @@
             font-weight: 600;
         }
 
-        /* الواجهة الرئيسية (Hero Section) */
+        /* واجهة الموقع الرئيسية (Hero Section) مع أنيميشن جمالي */
         .hero {
             position: relative;
-            height: 75vh;
+            height: 60vh;
+            min-height: 400px;
             background: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: #fff;
+            overflow: hidden;
+        }
+        @media(min-width: 768px) {
+            .hero { height: 75vh; }
         }
         .hero::after {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.45);
         }
         .hero-content {
             position: relative;
             z-index: 10;
             max-width: 600px;
             padding: 0 20px;
+            animation: heroEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes heroEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         .hero-content h1 {
-            font-size: 2.8rem;
+            font-size: 2rem;
             margin-bottom: 20px;
             font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        @media(min-width: 768px) {
+            .hero-content h1 { font-size: 2.8rem; }
         }
         .hero-buttons {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         .btn {
             background: #fff;
             color: #000;
             border: 2px solid #fff;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border-radius: 30px;
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .btn:hover {
             background: transparent;
             color: #fff;
+            transform: translateY(-2px);
         }
 
-        /* أقسام المنتجات التبويبية */
+        /* محتوى المنتجات */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 50px 20px;
+            padding: 30px 15px;
+        }
+        @media(min-width: 768px) {
+            .container { padding: 50px 20px; }
         }
         .section-title {
-            font-size: 2rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-bottom: 2px solid var(--text-color);
             display: inline-block;
             padding-bottom: 5px;
         }
+        @media(min-width: 768px) {
+            .section-title { font-size: 2rem; }
+        }
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        @media(min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 30px;
+                margin-bottom: 40px;
+            }
         }
         .product-card {
             border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             background: #fff;
             transition: transform 0.2s;
         }
-        .product-card:hover { transform: translateY(-5px); }
+        .product-card:hover { transform: translateY(-3px); }
         .product-img {
             width: 100%;
-            height: 320px;
+            height: 200px;
             object-fit: cover;
         }
+        @media(min-width: 768px) {
+            .product-img { height: 320px; }
+        }
         .product-info {
-            padding: 15px;
+            padding: 10px;
             text-align: center;
         }
+        @media(min-width: 768px) {
+            .product-info { padding: 15px; }
+        }
         .product-title {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+        }
+        @media(min-width: 768px) {
+            .product-title { font-size: 1.1rem; }
         }
         .product-price {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+        }
+        @media(min-width: 768px) {
+            .product-price { font-size: 1rem; }
         }
         .show-all-container {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
         }
         .btn-outline {
             background: transparent;
             color: var(--text-color);
             border: 2px solid var(--text-color);
-            padding: 10px 30px;
+            padding: 8px 25px;
             border-radius: 30px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            font-size: 0.9rem;
         }
         .btn-outline:hover {
             background: var(--text-color);
@@ -252,10 +307,13 @@
         /* فوتر الصفحة */
         footer {
             border-top: 1px solid var(--border-color);
-            padding: 40px 20px;
+            padding: 30px 15px;
             text-align: center;
             background: var(--gray-light);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+        }
+        @media(min-width: 768px) {
+            footer { padding: 40px 20px; font-size: 0.95rem; }
         }
         footer p { margin: 5px 0; }
 
@@ -271,13 +329,12 @@
 </head>
 <body>
 
-    <!-- الشريط العلوي -->
     <header>
         <div class="header-left">
             <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="بحث عن منتج...">
+                <input type="text" id="search-input" placeholder="Search...">
             </div>
         </div>
         <a href="index.html" class="brand-name">DAKN</a>
@@ -286,11 +343,10 @@
         </div>
     </header>
 
-    <!-- القائمة الجانبية -->
     <div class="sidebar" id="sidebar">
         <div>
             <div class="sidebar-header">
-                <h3>القائمة</h3>
+                <h3>Menu</h3>
                 <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <ul class="sidebar-links">
@@ -299,7 +355,7 @@
                 <li><a href="#" onclick="filterByCategory('pants'); toggleSidebar();">Pants</a></li>
                 <li><a href="#" onclick="filterByCategory('shorts'); toggleSidebar();">Shorts</a></li>
                 <li><a href="#" onclick="filterByCategory('suits'); toggleSidebar();">Suits</a></li>
-                <li><a href="admin.html">لوحة التحكم</a></li>
+                <li><a href="admin.html">Admin Dashboard</a></li>
             </ul>
         </div>
         <div class="sidebar-footer">
@@ -313,28 +369,25 @@
     </div>
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-    <!-- واجهة الموقع الرئيسية (Hero) -->
     <div class="hero">
         <div class="hero-content">
-            <h1>اكتشف تشكيلة الموسم الجديد</h1>
+            <h1>Discover The New Collection</h1>
             <div class="hero-buttons">
-                <a href="#shop-section" class="btn" onclick="showAllProducts()">Shop All</a>
+                <a href="#shop-section" class="btn" onclick="showAllTshirts()">Shop All T-Shirts</a>
                 <a href="#shop-section" class="btn" onclick="showNewArrivals()">New Arrivals</a>
             </div>
         </div>
     </div>
 
-    <!-- محتوى المتجر وتبويبات الأقسام -->
     <div class="container" id="shop-section">
         <div id="dynamic-sections">
-            <p style="text-align: center; font-size: 1.2rem;">جاري تحميل المنتجات...</p>
+            <p style="text-align: center; font-size: 1.1rem;">Loading products...</p>
         </div>
     </div>
 
-    <!-- فوتر الموقع -->
     <footer>
-        <p>جميع الحقوق محفوظة لبراند <strong>DAKN</strong> © 2026</p>
-        <p>الاسترجاع والاستبدال خلال 14 يوم من تاريخ الاستلام.</p>
+        <p>All Rights Reserved for <strong>DAKN</strong> © 2026</p>
+        <p>Exchange and Return policy within 14 days.</p>
     </footer>
 
     <script type="module">
@@ -363,79 +416,85 @@
                 snapshot.forEach(docSnap => {
                     allProducts.push({ id: docSnap.id, ...docSnap.data() });
                 });
-                renderSections(allProducts);
+                renderHomeTshirts(allProducts);
             } catch (err) {
                 console.error(err);
-                document.getElementById("dynamic-sections").innerHTML = `<p style="text-align: center;">تعذر تحميل المنتجات.</p>`;
+                document.getElementById("dynamic-sections").innerHTML = `<p style="text-align: center;">Failed to load products.</p>`;
             }
         }
 
-        window.renderSections = function(productsToDisplay) {
+        window.renderHomeTshirts = function(products) {
             const container = document.getElementById("dynamic-sections");
-            if (productsToDisplay.length === 0) {
-                container.innerHTML = `<p style="text-align: center; font-size: 1.2rem;">لا توجد منتجات مضافة حالياً.</p>`;
+            const tshirts = products.filter(p => p.category === 'tshirt');
+
+            if (tshirts.length === 0) {
+                container.innerHTML = `<p style="text-align: center; font-size: 1.1rem;">No t-shirts available right now.</p>`;
                 return;
             }
 
-            const categories = {
-                'tshirt': 'T-Shirts',
-                'hoodie': 'Hoodies',
-                'pants': 'Pants',
-                'shorts': 'Shorts',
-                'suits': 'Suits'
-            };
+            const displayed = tshirts.slice(0, 4);
 
-            let html = '';
-            for (const [catKey, catName] of Object.entries(categories)) {
-                const catProducts = productsToDisplay.filter(p => p.category === catKey);
-                if (catProducts.length === 0) continue;
+            let html = `
+                <div style="margin-bottom: 30px;">
+                    <h2 class="section-title">T-Shirts</h2>
+                    <div class="products-grid">
+            `;
 
-                const displayedProducts = catProducts.slice(0, 4);
-
+            displayed.forEach(p => {
                 html += `
-                    <div style="margin-bottom: 50px;">
-                        <h2 class="section-title">${catName}</h2>
-                        <div class="products-grid">
-                `;
-
-                displayedProducts.forEach(p => {
-                    html += `
-                        <div class="product-card">
-                            <img src="${p.image || ''}" class="product-img" alt="${p.name}">
-                            <div class="product-info">
-                                <div class="product-title">${p.name}</div>
-                                <div class="product-price">${p.price} ج.م</div>
-                            </div>
+                    <div class="product-card">
+                        <img src="${p.image || ''}" class="product-img" alt="${p.name}">
+                        <div class="product-info">
+                            <div class="product-title">${p.name}</div>
+                            <div class="product-price">${p.price} EGP</div>
                         </div>
-                    `;
-                });
+                    </div>
+                `;
+            });
 
+            html += `</div>`;
+
+            if (tshirts.length > 4) {
                 html += `
-                        </div>
+                    <div class="show-all-container">
+                        <button class="btn-outline" onclick="filterByCategory('tshirt')">Show All T-Shirts</button>
+                    </div>
                 `;
-
-                if (catProducts.length > 4) {
-                    html += `
-                        <div class="show-all-container">
-                            <button class="btn-outline" onclick="filterByCategory('${catKey}')">Show All ${catName}</button>
-                        </div>
-                    `;
-                }
-
-                html += `</div>`;
             }
 
+            html += `</div>`;
             container.innerHTML = html;
         }
 
-        window.showAllProducts = function() {
-            renderSections(allProducts);
+        window.showAllTshirts = function() {
+            filterByCategory('tshirt');
         }
 
         window.showNewArrivals = function() {
-            // منتجات تم إضافتها حديثاً (مثال افتراضي أو عشوائي لآخر العناصر)
+            const container = document.getElementById("dynamic-sections");
             const newProds = allProducts.slice(-4);
-            renderSections(newProds);
+            
+            let html = `
+                <div style="margin-bottom: 30px;">
+                    <button class="btn-outline" onclick="loadStoreProducts()" style="margin-bottom: 20px;">← Back to Home</button>
+                    <h2 class="section-title">New Arrivals</h2>
+                    <div class="products-grid">
+            `;
+
+            newProds.forEach(p => {
+                html += `
+                    <div class="product-card">
+                        <img src="${p.image || ''}" class="product-img" alt="${p.name}">
+                        <div class="product-info">
+                            <div class="product-title">${p.name}</div>
+                            <div class="product-price">${p.price} EGP</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+            container.innerHTML = html;
         }
 
         window.filterByCategory = function(categoryKey) {
@@ -446,27 +505,66 @@
             
             let html = `
                 <div style="margin-bottom: 30px;">
-                    <button class="btn-outline" onclick="showAllProducts()" style="margin-bottom: 20px;">← العودة لكل الأقسام</button>
+                    <button class="btn-outline" onclick="loadStoreProducts()" style="margin-bottom: 20px;">← Back to Home</button>
                     <h2 class="section-title">${categoriesMap[categoryKey] || categoryKey}</h2>
                     <div class="products-grid">
             `;
 
-            filtered.forEach(p => {
-                html += `
-                    <div class="product-card">
-                        <img src="${p.image || ''}" class="product-img" alt="${p.name}">
-                        <div class="product-info">
-                            <div class="product-title">${p.name}</div>
-                            <div class="product-price">${p.price} ج.م</div>
+            if (filtered.length === 0) {
+                html += `</div><p style="text-align: center; color: #777;">No products found in this category.</p></div>`;
+            } else {
+                filtered.forEach(p => {
+                    html += `
+                        <div class="product-card">
+                            <img src="${p.image || ''}" class="product-img" alt="${p.name}">
+                            <div class="product-info">
+                                <div class="product-title">${p.name}</div>
+                                <div class="product-price">${p.price} EGP</div>
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+                html += `</div></div>`;
+            }
 
-            html += `</div></div>`;
             container.innerHTML = html;
-            window.scrollTo({ top: document.getElementById('shop-section').offsetTop - 80, behavior: 'smooth' });
+            window.scrollTo({ top: document.getElementById('shop-section').offsetTop - 60, behavior: 'smooth' });
         }
+
+        document.getElementById("search-input").addEventListener("input", function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            if (!query) {
+                loadStoreProducts();
+                return;
+            }
+            const searched = allProducts.filter(p => p.name.toLowerCase().includes(query));
+            const container = document.getElementById("dynamic-sections");
+            
+            let html = `
+                <div style="margin-bottom: 30px;">
+                    <button class="btn-outline" onclick="loadStoreProducts()" style="margin-bottom: 20px;">← Back to Home</button>
+                    <h2 class="section-title">Search Results: "${query}"</h2>
+                    <div class="products-grid">
+            `;
+
+            if (searched.length === 0) {
+                html += `</div><p style="text-align: center; color: #777;">No matching products found.</p></div>`;
+            } else {
+                searched.forEach(p => {
+                    html += `
+                        <div class="product-card">
+                            <img src="${p.image || ''}" class="product-img" alt="${p.name}">
+                            <div class="product-info">
+                                <div class="product-title">${p.name}</div>
+                                <div class="product-price">${p.price} EGP</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+            container.innerHTML = html;
+        });
 
         window.toggleSidebar = function() {
             document.getElementById("sidebar").classList.toggle("open");
@@ -474,7 +572,7 @@
         }
 
         window.openCartModal = function() {
-            alert("عربة التسوق فارغة حالياً.");
+            alert("Your cart is empty.");
         }
 
         loadStoreProducts();
