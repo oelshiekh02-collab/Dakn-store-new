@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج - متجر دكن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text-color: #f5f5f5;
+            --accent-color: #d4a373;
+            --border-color: #333333;
+            --whatsapp-color: #25d366;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .details-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        @media(max-width: 768px) {
+            .details-container { grid-template-columns: 1fr; }
+        }
+        .product-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            background-color: #222;
+        }
+        .product-details-info h2 {
+            color: #fff;
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+        .price {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .section-label {
+            font-weight: 600;
+            color: #aaa;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .sizes-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .size-box {
+            border: 1px solid var(--border-color);
+            background: #222;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .size-box.selected, .size-box:hover {
+            border-color: var(--accent-color);
+            background-color: #2e261f;
+            color: var(--accent-color);
+        }
+        .whatsapp-order-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--whatsapp-color);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: background 0.2s, transform 0.1s;
+            box-sizing: border-box;
+        }
+        .whatsapp-order-btn:hover { background-color: #20ba5a; transform: scale(1.02); }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .loading { text-align: center; grid-column: 1 / -1; font-size: 1.3rem; color: #888; padding: 60px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div style="max-width: 800px; margin: 0 auto;">
+        <a href="index.html" class="back-link">← العودة إلى المتجر الرئيسي</a>
+    </div>
+
+    <div id="product-details-wrapper" class="details-container">
+        <div class="loading">جاري تحميل تفاصيل المنتج...</div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAeCLqtBvTvk430tgAIBRLu_r7nCFKu4ao",
+            authDomain: "dakn-store.firebaseapp.com",
+            projectId: "dakn-store",
+            storageBucket: "dakn-store.firebasestorage.app",
+            messagingSenderId: "89276988534",
+            appId: "1:89276988534:web:9be7e75cb86ef815b63357",
+            measurementId: "G-YNQGQ4J125"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const WHATSAPP_NUMBER = "201097597133";
+
+        let selectedSize = "M";
+
+        async function fetchProductDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const wrapper = document.getElementById("product-details-wrapper");
+
+            if (!productId) {
+                wrapper.innerHTML = `<div class="loading" style="color:#ff5252;">عذراً، لم يتم العثور على المنتج.</div>`;
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "products", productId);
+                const docSnap = await getDoc(docRef);
+
+                if (!docSnap.exists()) {
+                    wrapper.innerHTML = `<div class="loading" style="color:#ff5252;">هذا المنتج غير موجود أو تم حذفه.</div>`;
+                    return;
+                }
+
+                const p = docSnap.data();
+
+                wrapper.innerHTML = `
+                    <div>
+                        <img src="${p.image || ''}" alt="${p.name}" class="product-img">
+                    </div>
+                    <div class="product-details-info">
+                        <h2>${p.name}</h2>
+                        <div class="price">${p.price} ج.م</div>
+                        
+                        <span class="section-label">اختر المقاس المناسب:</span>
+                        <div class="sizes-group" id="sizes-container">
+                            <button class="size-box" onclick="selectSize('S', this)">S</button>
+                            <button class="size-box selected" onclick="selectSize('M', this)">M</button>
+                            <button class="size-box" onclick="selectSize('L', this)">L</button>
+                            <button class="size-box" onclick="selectSize('XL', this)">XL</button>
+                            <button class="size-box" onclick="selectSize('XXL', this)">XXL</button>
+                        </div>
+
+                        <span class="section-label" style="margin-top: 15px;">إتمام الطلب:</span>
+                        <a id="wa-btn" href="#" target="_blank" class="whatsapp-order-btn">اطلب عبر الواتساب 💬</a>
+                    </div>
+                `;
+
+                updateWhatsAppLink(p.name, p.price);
+
+            } catch (err) {
+                console.error(err);
+                wrapper.innerHTML = `<div class="loading" style="color:#ff5252;">حدث خطأ أثناء تحميل تفاصيل المنتج.</div>`;
+            }
+        }
+
+        window.selectSize = function(size, btn) {
+            selectedSize = size;
+            document.querySelectorAll(".size-box").forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            
+            const name = document.querySelector(".product-details-info h2").textContent;
+            const price = document.querySelector(".price").textContent;
+            updateWhatsAppLink(name, price);
+        }
+
+        function updateWhatsAppLink(name, price) {
+            const message = encodeURIComponent(`مرحباً، أريد طلب هذا المنتج:\n- الاسم: ${name}\n- السعر: ${price}\n- المقاس المطلوب: ${selectedSize}`);
+            document.getElementById("wa-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+        }
+
+        fetchProductDetails();
+    </script>
+</body>
+</html>
