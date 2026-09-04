@@ -53,6 +53,21 @@
             cursor: pointer;
             color: var(--text-color);
             padding: 5px;
+            position: relative;
+        }
+        .cart-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #000;
+            color: #fff;
+            font-size: 0.65rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .search-box {
             display: flex;
@@ -111,16 +126,13 @@
             margin: 0;
             flex-grow: 1;
         }
-        .sidebar-links li {
-            margin-bottom: 15px;
-        }
+        .sidebar-links li { margin-bottom: 15px; }
         .sidebar-links a {
             text-decoration: none;
             color: var(--text-color);
             font-size: 1.1rem;
             font-weight: 600;
             display: block;
-            transition: color 0.2s;
         }
         .sidebar-footer {
             border-top: 1px solid var(--border-color);
@@ -138,7 +150,7 @@
             font-weight: 600;
         }
 
-        /* واجهة الموقع الرئيسية (Hero Section) مع أنيميشن جمالي */
+        /* واجهة الموقع الرئيسية (Hero Section) مع أنيميشن */
         .hero {
             position: relative;
             height: 60vh;
@@ -151,9 +163,7 @@
             color: #fff;
             overflow: hidden;
         }
-        @media(min-width: 768px) {
-            .hero { height: 75vh; }
-        }
+        @media(min-width: 768px) { .hero { height: 75vh; } }
         .hero::after {
             content: '';
             position: absolute;
@@ -168,24 +178,15 @@
             animation: heroEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes heroEntrance {
-            0% {
-                opacity: 0;
-                transform: translateY(30px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
         .hero-content h1 {
             font-size: 2rem;
             margin-bottom: 20px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
-        @media(min-width: 768px) {
-            .hero-content h1 { font-size: 2.8rem; }
-        }
+        @media(min-width: 768px) { .hero-content h1 { font-size: 2.8rem; } }
         .hero-buttons {
             display: flex;
             gap: 10px;
@@ -205,21 +206,15 @@
             text-decoration: none;
             font-size: 0.9rem;
         }
-        .btn:hover {
-            background: transparent;
-            color: #fff;
-            transform: translateY(-2px);
-        }
+        .btn:hover { background: transparent; color: #fff; transform: translateY(-2px); }
 
-        /* محتوى المنتجات */
+        /* المحتوى والمنتجات */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 30px 15px;
         }
-        @media(min-width: 768px) {
-            .container { padding: 50px 20px; }
-        }
+        @media(min-width: 768px) { .container { padding: 50px 20px; } }
         .section-title {
             font-size: 1.6rem;
             font-weight: 700;
@@ -228,9 +223,6 @@
             display: inline-block;
             padding-bottom: 5px;
         }
-        @media(min-width: 768px) {
-            .section-title { font-size: 2rem; }
-        }
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -238,11 +230,7 @@
             margin-bottom: 30px;
         }
         @media(min-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-                gap: 30px;
-                margin-bottom: 40px;
-            }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
         }
         .product-card {
             border: 1px solid var(--border-color);
@@ -250,6 +238,7 @@
             overflow: hidden;
             background: #fff;
             transition: transform 0.2s;
+            cursor: pointer;
         }
         .product-card:hover { transform: translateY(-3px); }
         .product-img {
@@ -257,37 +246,10 @@
             height: 200px;
             object-fit: cover;
         }
-        @media(min-width: 768px) {
-            .product-img { height: 320px; }
-        }
-        .product-info {
-            padding: 10px;
-            text-align: center;
-        }
-        @media(min-width: 768px) {
-            .product-info { padding: 15px; }
-        }
-        .product-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        @media(min-width: 768px) {
-            .product-title { font-size: 1.1rem; }
-        }
-        .product-price {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        @media(min-width: 768px) {
-            .product-price { font-size: 1rem; }
-        }
-        .show-all-container {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        @media(min-width: 768px) { .product-img { height: 320px; } }
+        .product-info { padding: 10px; text-align: center; }
+        .product-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+        .product-price { font-size: 0.9rem; font-weight: 700; color: #333; margin-bottom: 10px; }
         .btn-outline {
             background: transparent;
             color: var(--text-color);
@@ -296,15 +258,108 @@
             border-radius: 30px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
             font-size: 0.9rem;
         }
-        .btn-outline:hover {
-            background: var(--text-color);
+        .btn-outline:hover { background: var(--text-color); color: #fff; }
+
+        /* صفحة تفاصيل المنتج */
+        .product-detail-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        @media(min-width: 768px) {
+            .product-detail-container { grid-template-columns: 1fr 1fr; align-items: start; }
+        }
+        .detail-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        @media(min-width: 768px) { .detail-img { height: 500px; } }
+        .size-selector {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .size-btn {
+            border: 1px solid var(--border-color);
+            background: #fff;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+        }
+        .size-btn.active {
+            border-color: #000;
+            background: #000;
             color: #fff;
         }
+        .qty-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .qty-btn {
+            background: var(--gray-light);
+            border: 1px solid var(--border-color);
+            width: 35px; height: 35px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+        }
 
-        /* فوتر الصفحة */
+        /* نافذة عربة التسوق (Cart Modal) */
+        .cart-modal {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 100%; max-width: 400px;
+            height: 100%;
+            background: #fff;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            z-index: 3000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .cart-modal.open { right: 0; }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .cart-items { flex-grow: 1; overflow-y: auto; }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--gray-light);
+            padding-bottom: 10px;
+        }
+        .cart-footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+        .checkout-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* فوتر */
         footer {
             border-top: 1px solid var(--border-color);
             padding: 30px 15px;
@@ -312,87 +367,111 @@
             background: var(--gray-light);
             font-size: 0.85rem;
         }
-        @media(min-width: 768px) {
-            footer { padding: 40px 20px; font-size: 0.95rem; }
-        }
-        footer p { margin: 5px 0; }
-
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5);
             display: none;
-            z-index: 1500;
+            z-index: 2500;
         }
         .overlay.active { display: block; }
     </style>
 </head>
 <body>
 
+    <!-- الشريط العلوي -->
     <header>
         <div class="header-left">
             <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="Search...">
+                <input type="text" id="search-input" placeholder="بحث...">
             </div>
         </div>
         <a href="index.html" class="brand-name">DAKN</a>
         <div class="header-right">
-            <button class="icon-btn" onclick="openCartModal()"><i class="fa-solid fa-bag-shopping"></i></button>
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="cart-badge" id="cart-count">0</span>
+            </button>
         </div>
     </header>
 
+    <!-- القائمة الجانبية -->
     <div class="sidebar" id="sidebar">
         <div>
             <div class="sidebar-header">
-                <h3>Menu</h3>
+                <h3>القائمة</h3>
                 <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <ul class="sidebar-links">
-                <li><a href="#" onclick="filterByCategory('tshirt'); toggleSidebar();">T-Shirts</a></li>
-                <li><a href="#" onclick="filterByCategory('hoodie'); toggleSidebar();">Hoodies</a></li>
-                <li><a href="#" onclick="filterByCategory('pants'); toggleSidebar();">Pants</a></li>
-                <li><a href="#" onclick="filterByCategory('shorts'); toggleSidebar();">Shorts</a></li>
-                <li><a href="#" onclick="filterByCategory('suits'); toggleSidebar();">Suits</a></li>
-                <li><a href="admin.html">Admin Dashboard</a></li>
+                <li><a href="#" onclick="filterByCategory('tshirt'); toggleSidebar();">تيشيرتات</a></li>
+                <li><a href="#" onclick="filterByCategory('hoodie'); toggleSidebar();">هوديز</a></li>
+                <li><a href="#" onclick="filterByCategory('pants'); toggleSidebar();">بناطيل</a></li>
+                <li><a href="#" onclick="filterByCategory('shorts'); toggleSidebar();">شورتات</a></li>
+                <li><a href="#" onclick="filterByCategory('suits'); toggleSidebar();">طقم كامل</a></li>
+                <li><a href="admin.html">لوحة الإدارة (Admin)</a></li>
             </ul>
         </div>
         <div class="sidebar-footer">
-            <a href="https://instagram.com" target="_blank" class="social-link">
-                <i class="fa-brands fa-instagram" style="font-size: 1.3rem;"></i> Instagram
-            </a>
-            <a href="https://wa.me/201234567890" target="_blank" class="social-link">
-                <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem; color: #25d366;"></i> 01234567890
-            </a>
+            <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram" style="font-size: 1.3rem;"></i> انستجرام</a>
+            <a href="https://wa.me/201234567890" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp" style="font-size: 1.3rem; color: #25d366;"></i> 01234567890</a>
         </div>
     </div>
-    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-    <div class="hero">
-        <div class="hero-content">
-            <h1>Discover The New Collection</h1>
-            <div class="hero-buttons">
-                <a href="#shop-section" class="btn" onclick="showAllTshirts()">Shop All T-Shirts</a>
-                <a href="#shop-section" class="btn" onclick="showNewArrivals()">New Arrivals</a>
+    <!-- نافذة عربة التسوق -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>عربة التسوق</h3>
+            <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cart-items-container">
+            <p style="text-align: center; color: #777;">العربة فارغة</p>
+        </div>
+        <div class="cart-footer">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 15px;">
+                <span>الإجمالي:</span>
+                <span id="cart-total-price">0 EGP</span>
+            </div>
+            <div class="checkout-form">
+                <input type="text" id="buyer-name" placeholder="الاسم الكريم">
+                <input type="tel" id="buyer-phone" placeholder="رقم الموبايل">
+                <button class="btn" style="width: 100%; background: #25d366; border-color: #25d366; color: #fff;" onclick="sendOrderWhatsApp()">
+                    <i class="fa-brands fa-whatsapp"></i> إتمام الطلب عبر واتساب
+                </button>
             </div>
         </div>
     </div>
 
-    <div class="container" id="shop-section">
-        <div id="dynamic-sections">
-            <p style="text-align: center; font-size: 1.1rem;">Loading products...</p>
+    <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
+
+    <!-- واجهة الموقع الرئيسية -->
+    <div class="hero" id="hero-section">
+        <div class="hero-content">
+            <h1>اكتشف تشكيلة دكن الجديدة</h1>
+            <div class="hero-buttons">
+                <a href="#shop-section" class="btn" onclick="showAllTshirts()">تصفح التيشيرتات</a>
+                <a href="#shop-section" class="btn" onclick="showNewArrivals()">وصل حديثاً</a>
+            </div>
         </div>
     </div>
 
+    <!-- محتوى المتجر الديناميكي -->
+    <div class="container" id="shop-section">
+        <div id="dynamic-content">
+            <p style="text-align: center;">جاري تحميل المنتجات...</p>
+        </div>
+    </div>
+
+    <!-- فوتر الموقع -->
     <footer>
-        <p>All Rights Reserved for <strong>DAKN</strong> © 2026</p>
-        <p>Exchange and Return policy within 14 days.</p>
+        <p>جميع الحقوق محفوظة لـ <strong>DAKN</strong> © 2026</p>
+        <p>سياسة الاستبدال والاسترجاع خلال 14 يوم.</p>
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAeCLqtBvTvk430tgAIBRLu_r7nCFKu4ao",
@@ -408,41 +487,42 @@
         const db = getFirestore(app);
 
         let allProducts = [];
+        let cart = JSON.parse(localStorage.getItem("dakn_cart")) || [];
 
-        async function loadStoreProducts() {
+        async function initStore() {
             try {
                 const snapshot = await getDocs(collection(db, "products"));
                 allProducts = [];
                 snapshot.forEach(docSnap => {
                     allProducts.push({ id: docSnap.id, ...docSnap.data() });
                 });
-                renderHomeTshirts(allProducts);
+                renderHomeGrid(allProducts);
+                updateCartBadge();
             } catch (err) {
                 console.error(err);
-                document.getElementById("dynamic-sections").innerHTML = `<p style="text-align: center;">Failed to load products.</p>`;
+                document.getElementById("dynamic-content").innerHTML = `<p style="text-align: center; color: red;">فشل تحميل المنتجات.</p>`;
             }
         }
 
-        window.renderHomeTshirts = function(products) {
-            const container = document.getElementById("dynamic-sections");
+        window.renderHomeGrid = function(products) {
+            document.getElementById("hero-section").style.display = "flex";
+            const container = document.getElementById("dynamic-content");
             const tshirts = products.filter(p => p.category === 'tshirt');
 
             if (tshirts.length === 0) {
-                container.innerHTML = `<p style="text-align: center; font-size: 1.1rem;">No t-shirts available right now.</p>`;
+                container.innerHTML = `<p style="text-align: center;">لا توجد منتجات متاحة حالياً.</p>`;
                 return;
             }
 
-            const displayed = tshirts.slice(0, 4);
-
             let html = `
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">T-Shirts</h2>
+                    <h2 class="section-title">تيشيرتات مميزة</h2>
                     <div class="products-grid">
             `;
 
-            displayed.forEach(p => {
+            tshirts.slice(0, 4).forEach(p => {
                 html += `
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductDetail('${p.id}')">
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                         <div class="product-info">
                             <div class="product-title">${p.name}</div>
@@ -453,37 +533,248 @@
             });
 
             html += `</div>`;
-
             if (tshirts.length > 4) {
-                html += `
-                    <div class="show-all-container">
-                        <button class="btn-outline" onclick="filterByCategory('tshirt')">Show All T-Shirts</button>
-                    </div>
-                `;
+                html += `<div style="text-align: center;"><button class="btn-outline" onclick="filterByCategory('tshirt')">عرض كل التيشيرتات</button></div>`;
             }
-
             html += `</div>`;
             container.innerHTML = html;
         }
 
-        window.showAllTshirts = function() {
-            filterByCategory('tshirt');
+        window.openProductDetail = async function(productId) {
+            document.getElementById("hero-section").style.display = "none";
+            const container = document.getElementById("dynamic-content");
+            container.innerHTML = `<p style="text-align: center;">جاري تحميل تفاصيل القطعة...</p>`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            try {
+                const docSnap = await getDoc(doc(db, "products", productId));
+                if (!docSnap.exists()) {
+                    container.innerHTML = `<p style="text-align: center;">القطعة غير موجودة.</p>`;
+                    return;
+                }
+                const p = docSnap.data();
+                p.id = docSnap.id;
+
+                let html = `
+                    <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← الرجوع للرئيسية</button>
+                    <div class="product-detail-container">
+                        <div>
+                            <img src="${p.image || ''}" class="detail-img" alt="${p.name}">
+                        </div>
+                        <div>
+                            <h2 style="font-size: 1.8rem; margin-top: 0;">${p.name}</h2>
+                            <div style="font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; color: #333;">${p.price} EGP</div>
+                            <p style="color: #666; line-height: 1.6;">${p.description || 'لا توجد تفاصيل إضافية متاحة لهذه القطعة.'}</p>
+                            
+                            <div style="margin-top: 20px;">
+                                <label style="font-weight: 700; display: block; margin-bottom: 8px;">اختر المقاس:</label>
+                                <div class="size-selector" id="size-selector">
+                                    <button class="size-btn active" onclick="selectSize(this, 'S')">S</button>
+                                    <button class="size-btn" onclick="selectSize(this, 'M')">M</button>
+                                    <button class="size-btn" onclick="selectSize(this, 'L')">L</button>
+                                    <button class="size-btn" onclick="selectSize(this, 'XL')">XL</button>
+                                    <button class="size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
+                                </div>
+                            </div>
+
+                            <div class="qty-box">
+                                <label style="font-weight: 700;">الكمية:</label>
+                                <button class="qty-btn" onclick="changeQty(-1)">-</button>
+                                <span id="product-qty" style="font-weight: 700; font-size: 1.1rem;">1</span>
+                                <button class="qty-btn" onclick="changeQty(1)">+</button>
+                            </div>
+
+                            <button class="btn" style="width: 100%; padding: 12px; font-size: 1rem; background: #000; color: #fff;" onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.image || ''}')">
+                                إضافة إلى العربة <i class="fa-solid fa-bag-shopping"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<p style="text-align: center; color: red;">حدث خطأ أثناء تحميل تفاصيل القطعة.</p>`;
+            }
         }
 
+        let selectedSize = 'S';
+        let currentQty = 1;
+
+        window.selectSize = function(btn, size) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSize = size;
+        }
+
+        window.changeQty = function(val) {
+            currentQty += val;
+            if (currentQty < 1) currentQty = 1;
+            document.getElementById("product-qty").textContent = currentQty;
+        }
+
+        window.addToCart = function(id, name, price, image) {
+            const itemKey = `${id}-${selectedSize}`;
+            const existingIndex = cart.findIndex(item => item.key === itemKey);
+
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += currentQty;
+            } else {
+                cart.push({ key: itemKey, id, name, price, image, size: selectedSize, qty: currentQty });
+            }
+
+            localStorage.setItem("dakn_cart", JSON.stringify(cart));
+            updateCartBadge();
+            alert("تم إضافة القطعة إلى العربة بنجاح!");
+            currentQty = 1;
+            toggleCart();
+        }
+
+        window.updateCartBadge = function() {
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById("cart-count").textContent = totalCount;
+            renderCartItems();
+        }
+
+        window.renderCartItems = function() {
+            const container = document.getElementById("cart-items-container");
+            const totalPriceEl = document.getElementById("cart-total-price");
+
+            if (cart.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: #777;">العربة فارغة</p>`;
+                totalPriceEl.textContent = "0 EGP";
+                return;
+            }
+
+            let html = "";
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.qty;
+                total += itemTotal;
+                html += `
+                    <div class="cart-item">
+                        <img src="${item.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                        <div style="flex-grow: 1; padding: 0 10px;">
+                            <div style="font-weight: 600; font-size: 0.9rem;">${item.name}</div>
+                            <div style="font-size: 0.8rem; color: #666;">المقاس: ${item.size} | العدد: ${item.qty}</div>
+                            <div style="font-weight: 700; font-size: 0.85rem;">${itemTotal} EGP</div>
+                        </div>
+                        <button class="icon-btn" style="color: #ff4d4d; font-size: 1rem;" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            totalPriceEl.textContent = `${total} EGP`;
+        }
+
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            localStorage.setItem("dakn_cart", JSON.stringify(cart));
+            updateCartBadge();
+        }
+
+        window.toggleCart = function() {
+            document.getElementById("cartModal").classList.toggle("open");
+            document.getElementById("overlay").classList.toggle("active");
+        }
+
+        window.toggleSidebar = function() {
+            document.getElementById("sidebar").classList.toggle("open");
+            document.getElementById("overlay").classList.toggle("active");
+        }
+
+        window.closeAllModals = function() {
+            document.getElementById("sidebar").classList.remove("open");
+            document.getElementById("cartModal").classList.remove("open");
+            document.getElementById("overlay").classList.remove("active");
+        }
+
+        window.sendOrderWhatsApp = function() {
+            const name = document.getElementById("buyer-name").value.trim();
+            const phone = document.getElementById("buyer-phone").value.trim();
+
+            if (!name || !phone) {
+                alert("من فضلك أدخل الاسم ورقم الموبايل لإتمام الطلب.");
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert("عربة التسوق فارغة.");
+                return;
+            }
+
+            let message = `*طلب جديد من متجر DAKN*%0A`;
+            message += `----------------------------%0A`;
+            message += `*اسم العميل:* ${name}%0A`;
+            message += `*رقم الموبايل:* ${phone}%0A`;
+            message += `----------------------------%0A`;
+            message += `*المنتجات المطلوبة:*%0A`;
+
+            let grandTotal = 0;
+            cart.forEach((item, index) => {
+                const itemSum = item.price * item.qty;
+                grandTotal += itemSum;
+                message += `${index + 1}. ${item.name} | المقاس: ${item.size} | العدد: ${item.qty} | السعر: ${itemSum} EGP%0A`;
+            });
+
+            message += `----------------------------%0A`;
+            message += `*الإجمالي الكلي:* ${grandTotal} EGP`;
+
+            const whatsappNumber = "201234567890"; // استبدل برقم الواتساب الخاص بك
+            window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+        }
+
+        window.filterByCategory = function(categoryKey) {
+            document.getElementById("hero-section").style.display = "none";
+            const container = document.getElementById("dynamic-content");
+            const filtered = allProducts.filter(p => p.category === categoryKey);
+            const categoriesMap = { 'tshirt': 'تيشيرتات', 'hoodie': 'هوديز', 'pants': 'بناطيل', 'shorts': 'شورتات', 'suits': 'طقم كامل' };
+
+            let html = `
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← الرجوع للرئيسية</button>
+                <div style="margin-bottom: 30px;">
+                    <h2 class="section-title">${categoriesMap[categoryKey] || categoryKey}</h2>
+                    <div class="products-grid">
+            `;
+
+            if (filtered.length === 0) {
+                html += `</div><p style="text-align: center; color: #777;">لا توجد منتجات في هذا القسم.</p></div>`;
+            } else {
+                filtered.forEach(p => {
+                    html += `
+                        <div class="product-card" onclick="openProductDetail('${p.id}')">
+                            <img src="${p.image || ''}" class="product-img" alt="${p.name}">
+                            <div class="product-info">
+                                <div class="product-title">${p.name}</div>
+                                <div class="product-price">${p.price} EGP</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+
+            container.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.showAllTshirts = function() { filterByCategory('tshirt'); }
         window.showNewArrivals = function() {
-            const container = document.getElementById("dynamic-sections");
+            document.getElementById("hero-section").style.display = "none";
+            const container = document.getElementById("dynamic-content");
             const newProds = allProducts.slice(-4);
             
             let html = `
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← الرجوع للرئيسية</button>
                 <div style="margin-bottom: 30px;">
-                    <button class="btn-outline" onclick="loadStoreProducts()" style="margin-bottom: 20px;">← Back to Home</button>
-                    <h2 class="section-title">New Arrivals</h2>
+                    <h2 class="section-title">وصل حديثاً</h2>
                     <div class="products-grid">
             `;
 
             newProds.forEach(p => {
                 html += `
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductDetail('${p.id}')">
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                         <div class="product-info">
                             <div class="product-title">${p.name}</div>
@@ -497,62 +788,29 @@
             container.innerHTML = html;
         }
 
-        window.filterByCategory = function(categoryKey) {
-            const container = document.getElementById("dynamic-sections");
-            const filtered = allProducts.filter(p => p.category === categoryKey);
-            
-            const categoriesMap = { 'tshirt': 'T-Shirts', 'hoodie': 'Hoodies', 'pants': 'Pants', 'shorts': 'Shorts', 'suits': 'Suits' };
-            
-            let html = `
-                <div style="margin-bottom: 30px;">
-                    <button class="btn-outline" onclick="loadStoreProducts()" style="margin-bottom: 20px;">← Back to Home</button>
-                    <h2 class="section-title">${categoriesMap[categoryKey] || categoryKey}</h2>
-                    <div class="products-grid">
-            `;
-
-            if (filtered.length === 0) {
-                html += `</div><p style="text-align: center; color: #777;">No products found in this category.</p></div>`;
-            } else {
-                filtered.forEach(p => {
-                    html += `
-                        <div class="product-card">
-                            <img src="${p.image || ''}" class="product-img" alt="${p.name}">
-                            <div class="product-info">
-                                <div class="product-title">${p.name}</div>
-                                <div class="product-price">${p.price} EGP</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += `</div></div>`;
-            }
-
-            container.innerHTML = html;
-            window.scrollTo({ top: document.getElementById('shop-section').offsetTop - 60, behavior: 'smooth' });
-        }
-
         document.getElementById("search-input").addEventListener("input", function(e) {
             const query = e.target.value.toLowerCase().trim();
             if (!query) {
-                loadStoreProducts();
+                initStore();
                 return;
             }
+            document.getElementById("hero-section").style.display = "none";
             const searched = allProducts.filter(p => p.name.toLowerCase().includes(query));
-            const container = document.getElementById("dynamic-sections");
+            const container = document.getElementById("dynamic-content");
             
             let html = `
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← الرجوع للرئيسية</button>
                 <div style="margin-bottom: 30px;">
-                    <button class="btn-outline" onclick="loadStoreProducts()" style="margin-bottom: 20px;">← Back to Home</button>
-                    <h2 class="section-title">Search Results: "${query}"</h2>
+                    <h2 class="section-title">نتائج البحث: "${query}"</h2>
                     <div class="products-grid">
             `;
 
             if (searched.length === 0) {
-                html += `</div><p style="text-align: center; color: #777;">No matching products found.</p></div>`;
+                html += `</div><p style="text-align: center; color: #777;">لا توجد منتجات مطابقة.</p></div>`;
             } else {
                 searched.forEach(p => {
                     html += `
-                        <div class="product-card">
+                        <div class="product-card" onclick="openProductDetail('${p.id}')">
                             <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                             <div class="product-info">
                                 <div class="product-title">${p.name}</div>
@@ -566,16 +824,7 @@
             container.innerHTML = html;
         });
 
-        window.toggleSidebar = function() {
-            document.getElementById("sidebar").classList.toggle("open");
-            document.getElementById("overlay").classList.toggle("active");
-        }
-
-        window.openCartModal = function() {
-            alert("Your cart is empty.");
-        }
-
-        loadStoreProducts();
+        initStore();
     </script>
 </body>
 </html>
