@@ -1,153 +1,153 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Dashboard - DAKN</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dakn - لوحة التحكم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #ffffff;
-            --card-bg: #ffffff;
-            --text-color: #000000;
-            --border-color: #dddddd;
-            --gray-light: #f9f9f9;
-        }
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 15px;
-            text-align: left;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
         }
-        @media(min-width: 768px) { body { padding: 20px; } }
-        header { text-align: center; margin-bottom: 25px; }
-        h1 { color: var(--text-color); font-size: 1.6rem; margin-bottom: 5px; }
-        @media(min-width: 768px) { h1 { font-size: 2rem; } }
-        .container { max-width: 900px; margin: 0 auto; }
-        .admin-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+        body {
+            background-color: #f9f9f9;
+            color: #111;
+        }
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+        .login-box {
+            background: #fff;
+            padding: 40px;
+            border: 1px solid #e5e5e5;
             border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: right;
         }
-        @media(min-width: 768px) { .admin-card { padding: 20px; margin-bottom: 25px; } }
-        .admin-card h2 {
-            font-size: 1.1rem;
-            color: var(--text-color);
-            margin-top: 0;
+        .login-box h2 {
+            margin-bottom: 24px;
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px 15px;
             margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            outline: none;
+            text-align: right;
         }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 0.85rem; color: #444; margin-bottom: 5px; font-weight: 600; }
-        .form-control {
-            width: 100%; background: #fff; border: 1px solid var(--border-color);
-            color: #000; padding: 9px; border-radius: 6px; font-family: 'Cairo', sans-serif; font-size: 0.9rem; outline: none;
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
         }
-        .form-control:focus { border-color: #000; }
-        textarea.form-control { resize: vertical; min-height: 70px; }
-        .btn {
-            background: #000; color: #fff; border: none; padding: 10px 18px;
-            border-radius: 6px; font-weight: 700; font-family: 'Cairo', sans-serif; cursor: pointer; font-size: 0.9rem;
+
+        #admin-content {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .btn:hover { opacity: 0.8; }
-        .btn-danger { background: #ff4d4d; color: #fff; }
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
-        @media(min-width: 768px) { table { font-size: 0.9rem; } }
-        th, td { padding: 8px; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
-        th { color: #000; font-weight: 700; }
-        td img { width: 35px; height: 35px; object-fit: cover; border-radius: 4px; }
-        .actions-cell { display: flex; gap: 4px; }
-        .action-btn {
-            padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer;
-            border: 1px solid #ccc; background: #fff; color: #000; font-family: 'Cairo', sans-serif; font-weight: 600;
+
+        #toast-notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #ffffff;
+            color: #111111;
+            border: 1px solid #e0e0e0;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            z-index: 999999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            text-align: center;
         }
-        .action-btn:hover { background: #eee; }
-        .back-link { display: inline-block; color: var(--text-color); text-decoration: none; font-weight: 700; margin-bottom: 15px; font-size: 0.9rem; }
+        #toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <a href="index.html" class="back-link">← Back to Store</a>
-        <header>
-            <h1>Admin Dashboard - DAKN</h1>
-            <p style="font-size: 0.9rem; color: #555;">Manage your store products easily</p>
-        </header>
+    <div id="toast-notification"></div>
 
-        <!-- قسم إضافة / تعديل منتج -->
-        <div class="admin-card">
-            <h2 id="form-section-title">Add New Product</h2>
-            <input type="hidden" id="editing-product-id">
-            <div class="form-group">
-                <label>Product Name:</label>
-                <input type="text" id="prod-name" class="form-control" placeholder="e.g., Oversized T-Shirt">
+    <!-- Login Screen -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>لوحة تحكم DAKN</h2>
+            <input type="email" id="admin-email" placeholder="البريد الإلكتروني">
+            <input type="password" id="admin-password" placeholder="كلمة المرور">
+            <button onclick="handleAdminLogin()">تسجيل الدخول</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Content -->
+    <div id="admin-content">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+            <h1>إدارة المتجر</h1>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="index.html" style="text-decoration: none; padding: 8px 16px; background: #111; color: #fff; border-radius: 4px; font-size: 0.9rem; font-weight: 600;">عرض المتجر</a>
+                <button onclick="logoutAdmin()" style="padding: 8px 16px; background: #ff4d4d; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">تسجيل الخروج</button>
             </div>
-            <div class="form-group">
-                <label>Price (EGP):</label>
-                <input type="number" id="prod-price" class="form-control" placeholder="e.g., 350">
+        </header>
+        
+        <div style="background: #fff; padding: 20px; border-radius: 6px; border: 1px solid #eee; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 15px;">إضافة منتج جديد</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
+                <input type="text" id="p-name" placeholder="اسم المنتج" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
+                <input type="number" id="p-price" placeholder="السعر (ج.م)" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
+                <input type="text" id="p-category" placeholder="القسم (tshirt, hoodie, pants...)" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
+                
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-size: 0.85rem; font-weight: 600;">اختر صورة المنتج من الجهاز:</label>
+                    <input type="file" id="p-image-file" accept="image/*" style="padding:6px; border:1px solid #ccc; border-radius:4px; background:#fafafa;">
+                </div>
+                
+                <button onclick="addNewProduct()" style="padding: 12px; background: #111; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">إضافة المنتج</button>
             </div>
-            <div class="form-group">
-                <label>Product Image (From Device):</label>
-                <input type="file" id="prod-image-file" class="form-control" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label>Category:</label>
-                <select id="prod-category" class="form-control">
-                    <option value="tshirt">T-Shirts</option>
-                    <option value="pants">Pants</option>
-                    <option value="hoodie">Hoodies</option>
-                    <option value="shorts">Shorts</option>
-                    <option value="suits">Suits</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Description (Optional):</label>
-                <textarea id="prod-desc" class="form-control" placeholder="Fabric details..."></textarea>
-            </div>
-            <button class="btn" id="save-product-btn" onclick="saveProduct()">Add Product</button>
-            <button class="btn btn-danger" id="cancel-edit-btn" style="display:none;" onclick="cancelEdit()">Cancel</button>
         </div>
 
-        <!-- قائمة المنتجات الحالية -->
-        <div class="admin-card">
-            <h2>Current Products</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-products-list">
-                        <tr><td colspan="5" style="text-align: center; color: #888;">Loading...</td></tr>
-                    </tbody>
-                </table>
-            </div>
+        <div style="background: #fff; padding: 20px; border-radius: 6px; border: 1px solid #eee;">
+            <h3 style="margin-bottom: 15px;">المنتجات الحالية</h3>
+            <div id="admin-products-list">جاري التحميل...</div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const ADMIN_PASSWORD = "12345";
-        const enteredPassword = prompt("Enter Admin Password:");
-        if (enteredPassword !== ADMIN_PASSWORD) {
-            alert("Incorrect Password!");
-            window.location.href = "index.html";
-        }
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAeCLqtBvTvk430tgAIBRLu_r7nCFKu4ao",
@@ -162,156 +162,145 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function initAdmin() {
-            await loadAdminProducts();
+        window.showToast = function(message) {
+            const toast = document.getElementById("toast-notification");
+            toast.textContent = message;
+            toast.classList.add("show");
+            setTimeout(() => { toast.classList.remove("show"); }, 3000);
         }
 
-        function convertImageToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-                reader.readAsDataURL(file);
-            });
-        }
+        const correctEmail = "Zerodesigner@admin.com";
+        const correctPass = "Zero123123#123";
 
-        window.saveProduct = async function() {
-            const id = document.getElementById("editing-product-id").value;
-            const name = document.getElementById("prod-name").value.trim();
-            const price = Number(document.getElementById("prod-price").value);
-            const imageFile = document.getElementById("prod-image-file").files[0];
-            const category = document.getElementById("prod-category").value;
-            const description = document.getElementById("prod-desc").value.trim();
+        window.handleAdminLogin = function() {
+            const emailInput = document.getElementById("admin-email").value.trim();
+            const passInput = document.getElementById("admin-password").value.trim();
 
-            if (!name || !price) {
-                alert("Please fill in the required fields (Name and Price).");
-                return;
-            }
-
-            try {
-                let imageURL = "";
-                if (imageFile) {
-                    imageURL = await convertImageToBase64(imageFile);
-                } else if (!id) {
-                    alert("Please select a product image.");
-                    return;
-                }
-
-                if (id && !imageFile) {
-                    const oldDocSnap = await getDoc(doc(db, "products", id));
-                    if (oldDocSnap.exists()) {
-                        imageURL = oldDocSnap.data().image;
-                    }
-                }
-
-                const productData = { name, price, image: imageURL, category, description };
-
-                if (id) {
-                    await updateDoc(doc(db, "products", id), productData);
-                    alert("Product updated successfully!");
-                } else {
-                    await addDoc(collection(db, "products"), productData);
-                    alert("Product added successfully!");
-                }
-                cancelEdit();
+            if (emailInput === correctEmail && passInput === correctPass) {
+                document.getElementById("login-overlay").style.display = "none";
+                document.getElementById("admin-content").style.display = "block";
+                showToast("أهلاً بك يا أدمن!");
                 loadAdminProducts();
-            } catch (err) {
-                console.error(err);
-                alert("An error occurred while saving.");
+            } else {
+                showToast("البريد أو كلمة المرور غير صحيحة!");
             }
         }
 
-        async function loadAdminProducts() {
-            const tbody = document.getElementById("admin-products-list");
+        window.logoutAdmin = function() {
+            document.getElementById("admin-content").style.display = "none";
+            document.getElementById("login-overlay").style.display = "flex";
+            document.getElementById("admin-email").value = "";
+            document.getElementById("admin-password").value = "";
+            showToast("تم تسجيل الخروج بنجاح.");
+        }
+
+        window.loadAdminProducts = async function() {
+            const container = document.getElementById("admin-products-list");
             try {
                 const snapshot = await getDocs(collection(db, "products"));
                 if (snapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888;">No products found.</td></tr>`;
+                    container.innerHTML = "<p>لا توجد منتجات.</p>";
                     return;
                 }
-
-                let html = "";
+                let html = "<div style='display:flex; flex-direction:column; gap:10px;'>";
                 snapshot.forEach(docSnap => {
                     const p = docSnap.data();
                     html += `
-                        <tr>
-                            <td><img src="${p.image || ''}" alt=""></td>
-                            <td>${p.name}</td>
-                            <td>${p.price} EGP</td>
-                            <td>${p.category}</td>
-                            <td>
-                                <div class="actions-cell">
-                                    <button class="action-btn" onclick="quickUpdatePrice('${docSnap.id}', ${p.price})">Price</button>
-                                    <button class="action-btn" onclick="editProduct('${docSnap.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.category}', '${(p.description || '').replace(/'/g, "\\'")}')">Edit</button>
-                                    <button class="action-btn" style="color: #ff4d4d; border-color: #ff4d4d;" onclick="deleteProduct('${docSnap.id}')">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:10px; gap:10px; flex-wrap:wrap;">
+                            <div style="display:flex; gap:8px;">
+                                <button onclick="deleteProduct('${docSnap.id}')" style="background:#ff4d4d; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:600;">حذف</button>
+                                <button onclick="updateProductPrice('${docSnap.id}', '${p.price}')" style="background:#333; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:600;">تعديل السعر</button>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px; text-align:right;">
+                                <div><strong>${p.name}</strong> - <span id="price-${docSnap.id}">${p.price}</span> ج.م</div>
+                                <img src="${p.image}" style="width:45px; height:45px; object-fit:cover; border-radius:4px;">
+                            </div>
+                        </div>
                     `;
                 });
-                tbody.innerHTML = html;
+                html += "</div>";
+                container.innerHTML = html;
             } catch (err) {
                 console.error(err);
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Failed to load.</td></tr>`;
+                container.innerHTML = "<p style='color:red;'>فشل تحميل المنتجات.</p>";
             }
         }
 
-        window.quickUpdatePrice = async function(id, currentPrice) {
-            const newPriceStr = prompt("Enter new price (EGP):", currentPrice);
-            if (newPriceStr === null) return;
-            const newPrice = Number(newPriceStr);
-            if (isNaN(newPrice) || newPrice <= 0) {
-                alert("Invalid price.");
+        window.addNewProduct = async function() {
+            const name = document.getElementById("p-name").value.trim();
+            const price = document.getElementById("p-price").value.trim();
+            const category = document.getElementById("p-category").value.trim();
+            const imageFile = document.getElementById("p-image-file").files[0];
+
+            if (!name || !price || !category) {
+                showToast("الرجاء إدخال الاسم، السعر، والقسم.");
                 return;
             }
+
+            if (!imageFile) {
+                showToast("الرجاء اختيار صورة من الجهاز.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(uploadEvent) {
+                const finalImageUrl = uploadEvent.target.result;
+                try {
+                    await addDoc(collection(db, "products"), {
+                        name,
+                        price: Number(price),
+                        image: finalImageUrl,
+                        category,
+                        sizes: "S, M, L, XL",
+                        description: "تصميم أنيق وعالي الجودة من DAKN."
+                    });
+                    showToast("تم إضافة المنتج بنجاح!");
+                    document.getElementById("p-name").value = "";
+                    document.getElementById("p-price").value = "";
+                    document.getElementById("p-category").value = "";
+                    document.getElementById("p-image-file").value = "";
+                    loadAdminProducts();
+                } catch (err) {
+                    console.error(err);
+                    showToast("حدث خطأ أثناء إضافة المنتج.");
+                }
+            };
+            reader.readAsDataURL(imageFile);
+        }
+
+        window.updateProductPrice = async function(id, currentPrice) {
+            const newPriceStr = prompt("أدخل السعر الجديد للمنتج:", currentPrice);
+            if (newPriceStr === null) return;
+            const newPrice = Number(newPriceStr);
+
+            if (isNaN(newPrice) || newPrice <= 0) {
+                showToast("الرجاء إدخال سعر صحيح.");
+                return;
+            }
+
             try {
-                await updateDoc(doc(db, "products", id), { price: newPrice });
-                alert("Price updated!");
+                const productRef = doc(db, "products", id);
+                await updateDoc(productRef, { price: newPrice });
+                showToast("تم تحديث السعر بنجاح!");
                 loadAdminProducts();
             } catch (err) {
-                alert("An error occurred.");
+                console.error(err);
+                showToast("خطأ أثناء تحديث السعر.");
             }
-        }
-
-        window.editProduct = function(id, name, price, category, description) {
-            document.getElementById("editing-product-id").value = id;
-            document.getElementById("prod-name").value = name;
-            document.getElementById("prod-price").value = price;
-            document.getElementById("prod-category").value = category;
-            document.getElementById("prod-desc").value = description;
-
-            document.getElementById("form-section-title").textContent = "Edit Product";
-            document.getElementById("save-product-btn").textContent = "Save Changes";
-            document.getElementById("cancel-edit-btn").style.display = "inline-block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        window.cancelEdit = function() {
-            document.getElementById("editing-product-id").value = "";
-            document.getElementById("prod-name").value = "";
-            document.getElementById("prod-price").value = "";
-            document.getElementById("prod-image-file").value = "";
-            document.getElementById("prod-category").value = "tshirt";
-            document.getElementById("prod-desc").value = "";
-
-            document.getElementById("form-section-title").textContent = "Add New Product";
-            document.getElementById("save-product-btn").textContent = "Add Product";
-            document.getElementById("cancel-edit-btn").style.display = "none";
         }
 
         window.deleteProduct = async function(id) {
-            if (confirm("Are you sure you want to delete this product?")) {
+            if (confirm("هل أنت متأكد من حذف هذا المنتج؟")) {
                 try {
                     await deleteDoc(doc(db, "products", id));
-                    alert("Product deleted.");
+                    showToast("تم حذف المنتج بنجاح!");
                     loadAdminProducts();
                 } catch (err) {
-                    alert("An error occurred.");
+                    console.error(err);
+                    showToast("خطأ أثناء حذف المنتج.");
                 }
             }
         }
-
-        initAdmin();
     </script>
 </body>
 </html>
