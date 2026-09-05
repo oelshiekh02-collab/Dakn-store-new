@@ -128,7 +128,17 @@
             <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
                 <input type="text" id="p-name" placeholder="اسم المنتج" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
                 <input type="number" id="p-price" placeholder="السعر (ج.م)" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
-                <input type="text" id="p-category" placeholder="القسم (tshirt, hoodie, pants...)" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
+                
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-size: 0.85rem; font-weight: 600;">اختر القسم:</label>
+                    <select id="p-category" style="padding:10px; border:1px solid #ccc; border-radius:4px; background:#fff; font-family:'Cairo', sans-serif;">
+                        <option value="tshirt">T-Shirt</option>
+                        <option value="hoodie">Hoodie</option>
+                        <option value="pants">Pants</option>
+                        <option value="shorts">Shorts</option>
+                        <option value="suits">Suits</option>
+                    </select>
+                </div>
                 
                 <div style="display: flex; flex-direction: column; gap: 5px;">
                     <label style="font-size: 0.85rem; font-weight: 600;">اختر صورة المنتج من الجهاز:</label>
@@ -212,7 +222,7 @@
                                 <button onclick="updateProductPrice('${docSnap.id}', '${p.price}')" style="background:#333; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:600;">تعديل السعر</button>
                             </div>
                             <div style="display:flex; align-items:center; gap:10px; text-align:right;">
-                                <div><strong>${p.name}</strong> - <span id="price-${docSnap.id}">${p.price}</span> ج.م</div>
+                                <div><strong>${p.name}</strong> (${p.category}) - <span id="price-${docSnap.id}">${p.price}</span> EGP</div>
                                 <img src="${p.image}" style="width:45px; height:45px; object-fit:cover; border-radius:4px;">
                             </div>
                         </div>
@@ -229,11 +239,11 @@
         window.addNewProduct = async function() {
             const name = document.getElementById("p-name").value.trim();
             const price = document.getElementById("p-price").value.trim();
-            const category = document.getElementById("p-category").value.trim();
+            const category = document.getElementById("p-category").value;
             const imageFile = document.getElementById("p-image-file").files[0];
 
-            if (!name || !price || !category) {
-                showToast("الرجاء إدخال الاسم، السعر، والقسم.");
+            if (!name || !price) {
+                showToast("الرجاء إدخال الاسم والسعر.");
                 return;
             }
 
@@ -252,12 +262,11 @@
                         image: finalImageUrl,
                         category,
                         sizes: "S, M, L, XL",
-                        description: "تصميم أنيق وعالي الجودة من DAKN."
+                        description: "High quality elegant design from DAKN."
                     });
                     showToast("تم إضافة المنتج بنجاح!");
                     document.getElementById("p-name").value = "";
                     document.getElementById("p-price").value = "";
-                    document.getElementById("p-category").value = "";
                     document.getElementById("p-image-file").value = "";
                     loadAdminProducts();
                 } catch (err) {
