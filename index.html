@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DAKN Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,9 +21,8 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            text-align: left;
+            text-align: right;
         }
-        /* Header */
         header {
             display: flex;
             justify-content: space-between;
@@ -95,24 +94,23 @@
             width: 100%;
         }
 
-        /* Sidebar Menu */
         .sidebar {
             position: fixed;
             top: 0;
-            left: -100%;
+            right: -100%;
             width: 280px;
             height: 100%;
             background: #fff;
-            border-right: 1px solid var(--border-color);
-            box-shadow: 5px 0 15px rgba(0,0,0,0.05);
-            transition: left 0.3s ease;
+            border-left: 1px solid var(--border-color);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+            transition: right 0.3s ease;
             z-index: 4000;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             padding: 30px 20px;
         }
-        .sidebar.open { left: 0; }
+        .sidebar.open { right: 0; }
         .sidebar-header {
             display: flex;
             justify-content: space-between;
@@ -151,7 +149,6 @@
             font-weight: 600;
         }
 
-        /* Hero Section */
         .hero {
             position: relative;
             height: 60vh;
@@ -176,11 +173,6 @@
             z-index: 10;
             max-width: 600px;
             padding: 0 20px;
-            animation: heroEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes heroEntrance {
-            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
         .hero-content h1 {
             font-size: 2rem;
@@ -209,7 +201,6 @@
         }
         .btn:hover { background: transparent; color: #fff; transform: translateY(-2px); }
 
-        /* Products Grid */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -248,7 +239,7 @@
             object-fit: cover;
         }
         @media(min-width: 768px) { .product-img { height: 320px; } }
-        .product-info { padding: 10px; text-align: center; }
+        .product-info { padding: 10px; text-align: right; }
         .product-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
         .product-price { font-size: 0.9rem; font-weight: 700; color: #333; margin-bottom: 10px; }
         .btn-outline {
@@ -263,7 +254,6 @@
         }
         .btn-outline:hover { background: var(--text-color); color: #fff; }
 
-        /* Show More Link Style */
         .show-more-link {
             background: none;
             border: none;
@@ -275,11 +265,9 @@
             text-decoration: underline;
             padding: 0;
             display: inline-block;
-            transition: opacity 0.2s;
         }
         .show-more-link:hover { opacity: 0.7; }
 
-        /* Product Details Page */
         .product-detail-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -331,21 +319,20 @@
             border-radius: 4px;
         }
 
-        /* Cart Modal */
         .cart-modal {
             position: fixed;
-            top: 0; right: -100%;
+            top: 0; left: -100%;
             width: 100%; max-width: 400px;
             height: 100%;
             background: #fff;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            box-shadow: 5px 0 20px rgba(0,0,0,0.1);
             z-index: 5000;
-            transition: right 0.3s ease;
+            transition: left 0.3s ease;
             display: flex;
             flex-direction: column;
             padding: 20px;
         }
-        .cart-modal.open { right: 0; }
+        .cart-modal.open { left: 0; }
         .cart-header {
             display: flex;
             justify-content: space-between;
@@ -374,9 +361,9 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-family: 'Cairo', sans-serif;
+            text-align: right;
         }
 
-        /* White Toast Notification Style */
         #toast-notification {
             position: fixed;
             bottom: 30px;
@@ -401,7 +388,6 @@
             opacity: 1;
         }
 
-        /* Footer */
         footer {
             border-top: 1px solid var(--border-color);
             padding: 30px 15px;
@@ -421,68 +407,64 @@
 </head>
 <body>
 
-    <!-- Toast Notification Element -->
     <div id="toast-notification"></div>
 
-    <!-- Header -->
     <header>
         <div class="header-left">
-            <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="Search..." oninput="handleSearch(this.value)">
-            </div>
-        </div>
-        <a href="#" onclick="initStore(); return false;" class="brand-name">DAKN</a>
-        <div class="header-right">
             <button class="icon-btn" onclick="toggleCart()">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span class="cart-badge" id="cart-count">0</span>
             </button>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="بحث..." oninput="handleSearch(this.value)">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </div>
+        <a href="#" onclick="initStore(); return false;" class="brand-name">DAKN</a>
+        <div class="header-right">
+            <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
         </div>
     </header>
 
-    <!-- Sidebar Menu -->
     <div class="sidebar" id="sidebar">
         <div>
             <div class="sidebar-header">
-                <h3>Menu</h3>
+                <h3>القائمة</h3>
                 <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <ul class="sidebar-links">
-                <li><a href="#" onclick="filterByCategory('tshirt'); toggleSidebar();">T-Shirts</a></li>
-                <li><a href="#" onclick="filterByCategory('hoodie'); toggleSidebar();">Hoodies</a></li>
-                <li><a href="#" onclick="filterByCategory('pants'); toggleSidebar();">Pants</a></li>
-                <li><a href="#" onclick="filterByCategory('shorts'); toggleSidebar();">Shorts</a></li>
-                <li><a href="#" onclick="filterByCategory('suits'); toggleSidebar();">Suits</a></li>
-                <li><a href="admin.html">Admin Dashboard</a></li>
+                <li><a href="#" onclick="filterByCategory('tshirt'); toggleSidebar();">تيشيرتات</a></li>
+                <li><a href="#" onclick="filterByCategory('hoodie'); toggleSidebar();">هوديز</a></li>
+                <li><a href="#" onclick="filterByCategory('pants'); toggleSidebar();">بناطيل</a></li>
+                <li><a href="#" onclick="filterByCategory('shorts'); toggleSidebar();">شورتات</a></li>
+                <li><a href="#" onclick="filterByCategory('suits'); toggleSidebar();">بدل</a></li>
+                <li><a href="admin.html">لوحة التحكم</a></li>
             </ul>
         </div>
         <div class="sidebar-footer">
-            <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram" style="font-size: 1.3rem;"></i> Instagram</a>
+            <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram" style="font-size: 1.3rem;"></i> انستجرام</a>
             <a href="https://wa.me/201234567890" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp" style="font-size: 1.3rem; color: #25d366;"></i> 01234567890</a>
         </div>
     </div>
 
-    <!-- Cart Modal -->
     <div class="cart-modal" id="cartModal">
         <div class="cart-header">
-            <h3>Shopping Cart</h3>
+            <h3>سلة المشتريات</h3>
             <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cart-items-container">
-            <p style="text-align: center; color: #777;">Your cart is empty</p>
+            <p style="text-align: center; color: #777;">السلة فارغة</p>
         </div>
         <div class="cart-footer">
             <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 15px;">
-                <span>Total:</span>
-                <span id="cart-total-price">0 EGP</span>
+                <span id="cart-total-price">0 ج.م</span>
+                <span>الإجمالي:</span>
             </div>
             <div class="checkout-form">
-                <input type="text" id="buyer-name" placeholder="Your Name">
-                <input type="tel" id="buyer-phone" placeholder="Phone Number">
+                <input type="text" id="buyer-name" placeholder="اسمك الكريم">
+                <input type="tel" id="buyer-phone" placeholder="رقم الهاتف">
                 <button class="btn" style="width: 100%; background: #25d366; border-color: #25d366; color: #fff;" onclick="sendOrderWhatsApp()">
-                    <i class="fa-brands fa-whatsapp"></i> Checkout via WhatsApp
+                    <i class="fa-brands fa-whatsapp"></i> اطلب عبر الواتساب
                 </button>
             </div>
         </div>
@@ -490,28 +472,25 @@
 
     <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
 
-    <!-- Hero Section -->
     <div class="hero" id="hero-section">
         <div class="hero-content">
-            <h1>Discover DAKN New Collection</h1>
+            <h1>اكتشف تشكيلة DAKN الجديدة</h1>
             <div class="hero-buttons">
-                <a href="#shop-section" class="btn" onclick="renderShopAll()">Shop All</a>
-                <a href="#shop-section" class="btn" onclick="showNewArrivals()">New Arrivals</a>
+                <a href="#shop-section" class="btn" onclick="showNewArrivals()">وصل حديثاً</a>
+                <a href="#shop-section" class="btn" onclick="renderShopAll()">تسوق الكل</a>
             </div>
         </div>
     </div>
 
-    <!-- Dynamic Store Content -->
     <div class="container" id="shop-section">
         <div id="dynamic-content">
-            <p style="text-align: center;">Loading products...</p>
+            <p style="text-align: center;">جاري تحميل المنتجات...</p>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
-        <p>All Rights Reserved <strong>DAKN</strong> © 2026</p>
-        <p>Exchange and return policy within 14 days.</p>
+        <p>جميع الحقوق محفوظة <strong>DAKN</strong> © 2026</p>
+        <p>سياسة الاستبدال والاسترجاع خلال 14 يوم.</p>
     </footer>
 
     <script type="module">
@@ -534,14 +513,11 @@
         let allProducts = [];
         let cart = JSON.parse(localStorage.getItem("dakn_cart")) || [];
 
-        // White Toast Notification Function
         window.showToast = function(message) {
             const toast = document.getElementById("toast-notification");
             toast.textContent = message;
             toast.classList.add("show");
-            setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
+            setTimeout(() => { toast.classList.remove("show"); }, 3000);
         }
 
         window.initStore = async function() {
@@ -556,7 +532,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) {
                 console.error(err);
-                document.getElementById("dynamic-content").innerHTML = `<p style="text-align: center; color: red;">Failed to load products.</p>`;
+                document.getElementById("dynamic-content").innerHTML = `<p style="text-align: center; color: red;">فشل تحميل المنتجات.</p>`;
             }
         }
 
@@ -565,13 +541,13 @@
             const container = document.getElementById("dynamic-content");
 
             if (products.length === 0) {
-                container.innerHTML = `<p style="text-align: center;">No products available currently.</p>`;
+                container.innerHTML = `<p style="text-align: center;">لا توجد منتجات متاحة حالياً.</p>`;
                 return;
             }
 
             let html = `
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">Shop All</h2>
+                    <h2 class="section-title">تسوق الكل</h2>
                     <div class="products-grid">
             `;
 
@@ -581,7 +557,7 @@
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                         <div class="product-info">
                             <div class="product-title">${p.name}</div>
-                            <div class="product-price">${p.price} EGP</div>
+                            <div class="product-price">${p.price} ج.م</div>
                         </div>
                     </div>
                 `;
@@ -589,7 +565,7 @@
 
             html += `</div>`;
             if (products.length > 4) {
-                html += `<div style="text-align: left;"><button class="show-more-link" onclick="renderShopAll()">Show More</button></div>`;
+                html += `<div style="text-align: right;"><button class="show-more-link" onclick="renderShopAll()">عرض المزيد</button></div>`;
             }
             html += `</div>`;
             container.innerHTML = html;
@@ -600,9 +576,9 @@
             const container = document.getElementById("dynamic-content");
 
             let html = `
-                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← العودة للمتجر</button>
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">All Products</h2>
+                    <h2 class="section-title">جميع المنتجات</h2>
                     <div class="products-grid">
             `;
 
@@ -612,7 +588,7 @@
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                         <div class="product-info">
                             <div class="product-title">${p.name}</div>
-                            <div class="product-price">${p.price} EGP</div>
+                            <div class="product-price">${p.price} ج.م</div>
                         </div>
                     </div>
                 `;
@@ -629,9 +605,9 @@
             const newProducts = [...allProducts].reverse().slice(0, 8);
 
             let html = `
-                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← العودة للمتجر</button>
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">New Arrivals</h2>
+                    <h2 class="section-title">وصل حديثاً</h2>
                     <div class="products-grid">
             `;
 
@@ -641,7 +617,7 @@
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                         <div class="product-info">
                             <div class="product-title">${p.name}</div>
-                            <div class="product-price">${p.price} EGP</div>
+                            <div class="product-price">${p.price} ج.م</div>
                         </div>
                     </div>
                 `;
@@ -658,14 +634,14 @@
             const filtered = allProducts.filter(p => p.category && p.category.toLowerCase() === category.toLowerCase());
 
             let html = `
-                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← العودة للمتجر</button>
                 <div style="margin-bottom: 30px;">
                     <h2 class="section-title">${category.toUpperCase()}</h2>
                     <div class="products-grid">
             `;
 
             if (filtered.length === 0) {
-                html += `<p>No products found in this category.</p>`;
+                html += `<p>لا توجد منتجات في هذا القسم.</p>`;
             } else {
                 filtered.forEach(p => {
                     html += `
@@ -673,7 +649,7 @@
                             <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                             <div class="product-info">
                                 <div class="product-title">${p.name}</div>
-                                <div class="product-price">${p.price} EGP</div>
+                                <div class="product-price">${p.price} ج.م</div>
                             </div>
                         </div>
                     `;
@@ -688,14 +664,14 @@
         window.openProductDetail = async function(id) {
             document.getElementById("hero-section").style.display = "none";
             const container = document.getElementById("dynamic-content");
-            container.innerHTML = `<p style="text-align: center;">Loading product details...</p>`;
+            container.innerHTML = `<p style="text-align: center;">جاري تحميل تفاصيل المنتج...</p>`;
 
             try {
                 const docRef = doc(db, "products", id);
                 const docSnap = await getDoc(docRef);
 
                 if (!docSnap.exists()) {
-                    container.innerHTML = `<p style="text-align: center;">Product not found.</p>`;
+                    container.innerHTML = `<p style="text-align: center;">المنتج غير موجود.</p>`;
                     return;
                 }
 
@@ -703,30 +679,30 @@
                 const sizes = p.sizes ? p.sizes.split(",") : ["S", "M", "L", "XL"];
 
                 let html = `
-                    <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
+                    <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← العودة للمتجر</button>
                     <div class="product-detail-container">
                         <div>
                             <img src="${p.image || ''}" class="detail-img" alt="${p.name}">
                         </div>
-                        <div>
+                        <div style="text-align: right;">
                             <h2 style="font-size: 1.8rem; margin-bottom: 10px;">${p.name}</h2>
-                            <p style="font-size: 1.3rem; font-weight: 700; margin-bottom: 15px;">${p.price} EGP</p>
-                            <p style="color: #555; margin-bottom: 20px; line-height: 1.6;">${p.description || 'No description available.'}</p>
+                            <p style="font-size: 1.3rem; font-weight: 700; margin-bottom: 15px;">${p.price} ج.م</p>
+                            <p style="color: #555; margin-bottom: 20px; line-height: 1.6;">${p.description || 'تصميم أنيق وعالي الجودة من DAKN.'}</p>
                             
-                            <div style="font-weight: 600; margin-bottom: 5px;">Select Size:</div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">اختر المقاس:</div>
                             <div class="size-selector" id="size-selector">
                                 ${sizes.map((s, idx) => `<button class="size-btn ${idx === 0 ? 'active' : ''}" onclick="selectSize(this)">${s.trim()}</button>`).join('')}
                             </div>
 
-                            <div style="font-weight: 600; margin-bottom: 5px;">Quantity:</div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">الكمية:</div>
                             <div class="qty-box">
-                                <button class="qty-btn" onclick="changeQty(-1)">-</button>
-                                <span id="product-qty" style="font-weight: 700; font-size: 1.1rem;">1</span>
                                 <button class="qty-btn" onclick="changeQty(1)">+</button>
+                                <span id="product-qty" style="font-weight: 700; font-size: 1.1rem;">1</span>
+                                <button class="qty-btn" onclick="changeQty(-1)">-</button>
                             </div>
 
                             <button class="btn" style="width: 100%; background: #000; color: #fff; padding: 12px; margin-top: 10px;" onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.image || ''}')">
-                                Add to Cart
+                                إضافة إلى السلة
                             </button>
                         </div>
                     </div>
@@ -735,11 +711,10 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) {
                 console.error(err);
-                container.innerHTML = `<p style="text-align: center; color: red;">Error loading product details.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: red;">خطأ في تحميل تفاصيل المنتج.</p>`;
             }
         }
 
-        window.selectStorage = {};
         window.selectSize = function(btn) {
             const parent = btn.parentElement;
             parent.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
@@ -767,7 +742,7 @@
 
             localStorage.setItem("dakn_cart", JSON.stringify(cart));
             updateCartBadge();
-            showToast("Product added to cart successfully!");
+            showToast("تمت إضافة المنتج إلى السلة بنجاح!");
         }
 
         window.updateCartBadge = function() {
@@ -803,8 +778,8 @@
             const totalPriceEl = document.getElementById("cart-total-price");
 
             if (cart.length === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #777;">Your cart is empty</p>`;
-                totalPriceEl.textContent = "0 EGP";
+                container.innerHTML = `<p style="text-align: center; color: #777;">السلة فارغة</p>`;
+                totalPriceEl.textContent = "0 ج.م";
                 return;
             }
 
@@ -815,19 +790,19 @@
                 total += item.price * item.qty;
                 html += `
                     <div class="cart-item">
-                        <img src="${item.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                        <div style="flex-grow: 1; padding: 0 10px;">
-                            <div style="font-size: 0.9rem; font-weight: 600;">${item.name}</div>
-                            <div style="font-size: 0.8rem; color: #555;">Size: ${item.size} | Qty: ${item.qty}</div>
-                            <div style="font-size: 0.85rem; font-weight: 700;">${item.price * item.qty} EGP</div>
-                        </div>
                         <button class="icon-btn" onclick="removeFromCart(${index})" style="color: red;"><i class="fa-solid fa-trash"></i></button>
+                        <div style="flex-grow: 1; padding: 0 10px; text-align: right;">
+                            <div style="font-size: 0.9rem; font-weight: 600;">${item.name}</div>
+                            <div style="font-size: 0.8rem; color: #555;">المقاس: ${item.size} | الكمية: ${item.qty}</div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">${item.price * item.qty} ج.م</div>
+                        </div>
+                        <img src="${item.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                     </div>
                 `;
             });
 
             container.innerHTML = html;
-            totalPriceEl.textContent = total + " EGP";
+            totalPriceEl.textContent = total + " ج.م";
         }
 
         window.removeFromCart = function(index) {
@@ -835,7 +810,7 @@
             localStorage.setItem("dakn_cart", JSON.stringify(cart));
             updateCartBadge();
             renderCartItems();
-            showToast("Product removed from cart.");
+            showToast("تم إزالة المنتج من السلة.");
         }
 
         window.sendOrderWhatsApp = function() {
@@ -843,24 +818,24 @@
             const phone = document.getElementById("buyer-phone").value.trim();
 
             if (!name || !phone) {
-                showToast("Please enter your name and phone number.");
+                showToast("الرجاء إدخال الاسم ورقم الهاتف.");
                 return;
             }
 
             if (cart.length === 0) {
-                showToast("Your cart is empty.");
+                showToast("سلة المشتريات فارغة.");
                 return;
             }
 
-            let message = `New Order from DAKN Store:\nName: ${name}\nPhone: ${phone}\n\nProducts:\n`;
+            let message = `طلب جديد من متجر DAKN:\nالاسم: ${name}\nالهاتف: ${phone}\n\nالمنتجات:\n`;
             let total = 0;
 
             cart.forEach(item => {
-                message += `- ${item.name} (Size: ${item.size}) x ${item.qty} = ${item.price * item.qty} EGP\n`;
+                message += `- ${item.name} (المقاس: ${item.size}) × ${item.qty} = ${item.price * item.qty} ج.م\n`;
                 total += item.price * item.qty;
             });
 
-            message += `\nTotal Price: ${total} EGP`;
+            message += `\nإجمالي المبلغ: ${total} ج.م`;
 
             const encodedMessage = encodeURIComponent(message);
             window.open(`https://wa.me/201234567890?text=${encodedMessage}`, '_blank');
@@ -876,7 +851,6 @@
             renderHomeGrid(filtered);
         }
 
-        // Initialize store on load
         initStore();
     </script>
 </body>
