@@ -13,7 +13,7 @@
             --border-color: #e5e5e5;
             --gray-light: #f9f9f9;
         }
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; scroll-behavior: smooth; }
         body {
             font-family: 'Cairo', sans-serif;
             background-color: var(--bg-color);
@@ -376,6 +376,31 @@
             font-family: 'Cairo', sans-serif;
         }
 
+        /* White Toast Notification Style */
+        #toast-notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #ffffff;
+            color: #111111;
+            border: 1px solid #e0e0e0;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            z-index: 999999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            text-align: center;
+        }
+        #toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
         /* Footer */
         footer {
             border-top: 1px solid var(--border-color);
@@ -396,13 +421,16 @@
 </head>
 <body>
 
+    <!-- Toast Notification Element -->
+    <div id="toast-notification"></div>
+
     <!-- Header -->
     <header>
         <div class="header-left">
             <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="Search...">
+                <input type="text" id="search-input" placeholder="Search..." oninput="handleSearch(this.value)">
             </div>
         </div>
         <a href="#" onclick="initStore(); return false;" class="brand-name">DAKN</a>
@@ -506,6 +534,16 @@
         let allProducts = [];
         let cart = JSON.parse(localStorage.getItem("dakn_cart")) || [];
 
+        // White Toast Notification Function
+        window.showToast = function(message) {
+            const toast = document.getElementById("toast-notification");
+            toast.textContent = message;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
         window.initStore = async function() {
             try {
                 const snapshot = await getDocs(collection(db, "products"));
@@ -564,263 +602,11 @@
             let html = `
                 <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">Shop All</h2>
+                    <h2 class="section-title">All Products</h2>
                     <div class="products-grid">
             `;
 
-            if (allProducts.length === 0) {
-                html += `</div><p style="text-align: center; color: #777;">No products available.</p></div>`;
-            } else {
-                allProducts.forEach(p => {
-                    html += `
-                        <div class="product-card" onclick="openProductDetail('${p.id}')">
-                            <img src="${p.image || ''}" class="product-img" alt="${p.name}">
-                            <div class="product-info">
-                                <div class="product-title">${p.name}</div>
-                                <div class="product-price">${p.price} EGP</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += `</div></div>`;
-            }
-
-            container.innerHTML = html;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        window.openProductDetail = async function(productId) {
-            document.getElementById("hero-section").style.display = "none";
-            const container = document.getElementById("dynamic-content");
-            container.innerHTML = `<p style="text-align: center;">Loading product details...</p>`;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            try {
-                const docSnap = await getDoc(doc(db, "products", productId));
-                if (!docSnap.exists()) {
-                    container.innerHTML = `<p style="text-align: center;">Product not found.</p>`;
-                    return;
-                }
-                const p = docSnap.data();
-                p.id = docSnap.id;
-
-                let html = `
-                    <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
-                    <div class="product-detail-container">
-                        <div>
-                            <img src="${p.image || ''}" class="detail-img" alt="${p.name}">
-                        </div>
-                        <div>
-                            <h2 style="font-size: 1.8rem; margin-top: 0;">${p.name}</h2>
-                            <div style="font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; color: #333;">${p.price} EGP</div>
-                            <p style="color: #666; line-height: 1.6;">${p.description || 'No additional details available for this item.'}</p>
-                            
-                            <div style="margin-top: 20px;">
-                                <label style="font-weight: 700; display: block; margin-bottom: 8px;">Select Size:</label>
-                                <div class="size-selector" id="size-selector">
-                                    <button class="size-btn active" onclick="selectSize(this, 'S')">S</button>
-                                    <button class="size-btn" onclick="selectSize(this, 'M')">M</button>
-                                    <button class="size-btn" onclick="selectSize(this, 'L')">L</button>
-                                    <button class="size-btn" onclick="selectSize(this, 'XL')">XL</button>
-                                    <button class="size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
-                                </div>
-                            </div>
-
-                            <div class="qty-box">
-                                <label style="font-weight: 700;">Quantity:</label>
-                                <button class="qty-btn" onclick="changeQty(-1)">-</button>
-                                <span id="product-qty" style="font-weight: 700; font-size: 1.1rem;">1</span>
-                                <button class="qty-btn" onclick="changeQty(1)">+</button>
-                            </div>
-
-                            <button class="btn" style="width: 100%; padding: 12px; font-size: 1rem; background: #000; color: #fff;" onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.image || ''}')">
-                                Add to Cart <i class="fa-solid fa-bag-shopping"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML = html;
-            } catch (err) {
-                console.error(err);
-                container.innerHTML = `<p style="text-align: center; color: red;">Error loading product details.</p>`;
-            }
-        }
-
-        let selectedSize = 'S';
-        let currentQty = 1;
-
-        window.selectSize = function(btn, size) {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedSize = size;
-        }
-
-        window.changeQty = function(val) {
-            currentQty += val;
-            if (currentQty < 1) currentQty = 1;
-            document.getElementById("product-qty").textContent = currentQty;
-        }
-
-        window.addToCart = function(id, name, price, image) {
-            const itemKey = `${id}-${selectedSize}`;
-            const existingIndex = cart.findIndex(item => item.key === itemKey);
-
-            if (existingIndex > -1) {
-                cart[existingIndex].qty += currentQty;
-            } else {
-                cart.push({ key: itemKey, id, name, price, image, size: selectedSize, qty: currentQty });
-            }
-
-            localStorage.setItem("dakn_cart", JSON.stringify(cart));
-            updateCartBadge();
-            alert("Product added to cart successfully!");
-            currentQty = 1;
-            toggleCart();
-        }
-
-        window.updateCartBadge = function() {
-            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-            document.getElementById("cart-count").textContent = totalCount;
-            renderCartItems();
-        }
-
-        window.renderCartItems = function() {
-            const container = document.getElementById("cart-items-container");
-            const totalPriceEl = document.getElementById("cart-total-price");
-
-            if (cart.length === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #777;">Your cart is empty</p>`;
-                totalPriceEl.textContent = "0 EGP";
-                return;
-            }
-
-            let html = "";
-            let total = 0;
-
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.qty;
-                total += itemTotal;
-                html += `
-                    <div class="cart-item">
-                        <img src="${item.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                        <div style="flex-grow: 1; padding: 0 10px;">
-                            <div style="font-weight: 600; font-size: 0.9rem;">${item.name}</div>
-                            <div style="font-size: 0.8rem; color: #666;">Size: ${item.size} | Qty: ${item.qty}</div>
-                            <div style="font-weight: 700; font-size: 0.85rem;">${itemTotal} EGP</div>
-                        </div>
-                        <button class="icon-btn" style="color: #ff4d4d; font-size: 1rem;" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-            totalPriceEl.textContent = `${total} EGP`;
-        }
-
-        window.removeFromCart = function(index) {
-            cart.splice(index, 1);
-            localStorage.setItem("dakn_cart", JSON.stringify(cart));
-            updateCartBadge();
-        }
-
-        window.toggleCart = function() {
-            document.getElementById("cartModal").classList.toggle("open");
-            document.getElementById("overlay").classList.toggle("active");
-        }
-
-        window.toggleSidebar = function() {
-            document.getElementById("sidebar").classList.toggle("open");
-            document.getElementById("overlay").classList.toggle("active");
-        }
-
-        window.closeAllModals = function() {
-            document.getElementById("sidebar").classList.remove("open");
-            document.getElementById("cartModal").classList.remove("open");
-            document.getElementById("overlay").classList.remove("active");
-        }
-
-        window.sendOrderWhatsApp = function() {
-            const name = document.getElementById("buyer-name").value.trim();
-            const phone = document.getElementById("buyer-phone").value.trim();
-
-            if (!name || !phone) {
-                alert("Please enter your name and phone number to complete the order.");
-                return;
-            }
-
-            if (cart.length === 0) {
-                alert("Your cart is empty.");
-                return;
-            }
-
-            let message = `*New Order from DAKN Store*%0A`;
-            message += `----------------------------%0A`;
-            message += `*Customer Name:* ${name}%0A`;
-            message += `*Phone Number:* ${phone}%0A`;
-            message += `----------------------------%0A`;
-            message += `*Ordered Items:*%0A`;
-
-            let grandTotal = 0;
-            cart.forEach((item, index) => {
-                const itemSum = item.price * item.qty;
-                grandTotal += itemSum;
-                message += `${index + 1}. ${item.name} | Size: ${item.size} | Qty: ${item.qty} | Price: ${itemSum} EGP%0A`;
-            });
-
-            message += `----------------------------%0A`;
-            message += `*Grand Total:* ${grandTotal} EGP`;
-
-            const whatsappNumber = "201234567890";
-            window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
-        }
-
-        window.filterByCategory = function(categoryKey) {
-            document.getElementById("hero-section").style.display = "none";
-            const container = document.getElementById("dynamic-content");
-            const filtered = allProducts.filter(p => p.category === categoryKey);
-            const categoriesMap = { 'tshirt': 'T-Shirts', 'hoodie': 'Hoodies', 'pants': 'Pants', 'shorts': 'Shorts', 'suits': 'Suits' };
-
-            let html = `
-                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
-                <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">${categoriesMap[categoryKey] || categoryKey}</h2>
-                    <div class="products-grid">
-            `;
-
-            if (filtered.length === 0) {
-                html += `</div><p style="text-align: center; color: #777;">No products found in this category.</p></div>`;
-            } else {
-                filtered.forEach(p => {
-                    html += `
-                        <div class="product-card" onclick="openProductDetail('${p.id}')">
-                            <img src="${p.image || ''}" class="product-img" alt="${p.name}">
-                            <div class="product-info">
-                                <div class="product-title">${p.name}</div>
-                                <div class="product-price">${p.price} EGP</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += `</div></div>`;
-            }
-
-            container.innerHTML = html;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        window.showNewArrivals = function() {
-            document.getElementById("hero-section").style.display = "none";
-            const container = document.getElementById("dynamic-content");
-            const newProds = allProducts.slice(-4);
-            
-            let html = `
-                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
-                <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">New Arrivals</h2>
-                    <div class="products-grid">
-            `;
-
-            newProds.forEach(p => {
+            allProducts.forEach(p => {
                 html += `
                     <div class="product-card" onclick="openProductDetail('${p.id}')">
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
@@ -837,27 +623,51 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        document.getElementById("search-input").addEventListener("input", function(e) {
-            const query = e.target.value.toLowerCase().trim();
-            if (!query) {
-                initStore();
-                return;
-            }
+        window.showNewArrivals = function() {
             document.getElementById("hero-section").style.display = "none";
-            const searched = allProducts.filter(p => p.name.toLowerCase().includes(query));
             const container = document.getElementById("dynamic-content");
-            
+            const newProducts = [...allProducts].reverse().slice(0, 8);
+
             let html = `
                 <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">Search Results: "${query}"</h2>
+                    <h2 class="section-title">New Arrivals</h2>
                     <div class="products-grid">
             `;
 
-            if (searched.length === 0) {
-                html += `</div><p style="text-align: center; color: #777;">No matching products found.</p></div>`;
+            newProducts.forEach(p => {
+                html += `
+                    <div class="product-card" onclick="openProductDetail('${p.id}')">
+                        <img src="${p.image || ''}" class="product-img" alt="${p.name}">
+                        <div class="product-info">
+                            <div class="product-title">${p.name}</div>
+                            <div class="product-price">${p.price} EGP</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.filterByCategory = function(category) {
+            document.getElementById("hero-section").style.display = "none";
+            const container = document.getElementById("dynamic-content");
+            const filtered = allProducts.filter(p => p.category && p.category.toLowerCase() === category.toLowerCase());
+
+            let html = `
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
+                <div style="margin-bottom: 30px;">
+                    <h2 class="section-title">${category.toUpperCase()}</h2>
+                    <div class="products-grid">
+            `;
+
+            if (filtered.length === 0) {
+                html += `<p>No products found in this category.</p>`;
             } else {
-                searched.forEach(p => {
+                filtered.forEach(p => {
                     html += `
                         <div class="product-card" onclick="openProductDetail('${p.id}')">
                             <img src="${p.image || ''}" class="product-img" alt="${p.name}">
@@ -868,11 +678,205 @@
                         </div>
                     `;
                 });
-                html += `</div></div>`;
             }
-            container.innerHTML = html;
-        });
 
+            html += `</div></div>`;
+            container.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.openProductDetail = async function(id) {
+            document.getElementById("hero-section").style.display = "none";
+            const container = document.getElementById("dynamic-content");
+            container.innerHTML = `<p style="text-align: center;">Loading product details...</p>`;
+
+            try {
+                const docRef = doc(db, "products", id);
+                const docSnap = await getDoc(docRef);
+
+                if (!docSnap.exists()) {
+                    container.innerHTML = `<p style="text-align: center;">Product not found.</p>`;
+                    return;
+                }
+
+                const p = { id: docSnap.id, ...docSnap.data() };
+                const sizes = p.sizes ? p.sizes.split(",") : ["S", "M", "L", "XL"];
+
+                let html = `
+                    <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
+                    <div class="product-detail-container">
+                        <div>
+                            <img src="${p.image || ''}" class="detail-img" alt="${p.name}">
+                        </div>
+                        <div>
+                            <h2 style="font-size: 1.8rem; margin-bottom: 10px;">${p.name}</h2>
+                            <p style="font-size: 1.3rem; font-weight: 700; margin-bottom: 15px;">${p.price} EGP</p>
+                            <p style="color: #555; margin-bottom: 20px; line-height: 1.6;">${p.description || 'No description available.'}</p>
+                            
+                            <div style="font-weight: 600; margin-bottom: 5px;">Select Size:</div>
+                            <div class="size-selector" id="size-selector">
+                                ${sizes.map((s, idx) => `<button class="size-btn ${idx === 0 ? 'active' : ''}" onclick="selectSize(this)">${s.trim()}</button>`).join('')}
+                            </div>
+
+                            <div style="font-weight: 600; margin-bottom: 5px;">Quantity:</div>
+                            <div class="qty-box">
+                                <button class="qty-btn" onclick="changeQty(-1)">-</button>
+                                <span id="product-qty" style="font-weight: 700; font-size: 1.1rem;">1</span>
+                                <button class="qty-btn" onclick="changeQty(1)">+</button>
+                            </div>
+
+                            <button class="btn" style="width: 100%; background: #000; color: #fff; padding: 12px; margin-top: 10px;" onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.image || ''}')">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<p style="text-align: center; color: red;">Error loading product details.</p>`;
+            }
+        }
+
+        window.selectStorage = {};
+        window.selectSize = function(btn) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        window.changeQty = function(val) {
+            const qtySpan = document.getElementById("product-qty");
+            let qty = parseInt(qtySpan.textContent) + val;
+            if (qty < 1) qty = 1;
+            qtySpan.textContent = qty;
+        }
+
+        window.addToCart = function(id, name, price, image) {
+            const activeSizeBtn = document.querySelector('.size-btn.active');
+            const size = activeSizeBtn ? activeSizeBtn.textContent : 'M';
+            const qty = parseInt(document.getElementById("product-qty").textContent);
+
+            const existingIndex = cart.findIndex(item => item.id === id && item.size === size);
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += qty;
+            } else {
+                cart.push({ id, name, price, image, size, qty });
+            }
+
+            localStorage.setItem("dakn_cart", JSON.stringify(cart));
+            updateCartBadge();
+            showToast("Product added to cart successfully!");
+        }
+
+        window.updateCartBadge = function() {
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById("cart-count").textContent = totalQty;
+        }
+
+        window.toggleCart = function() {
+            const modal = document.getElementById("cartModal");
+            const overlay = document.getElementById("overlay");
+            modal.classList.toggle("open");
+            overlay.classList.toggle("active");
+            if (modal.classList.contains("open")) {
+                renderCartItems();
+            }
+        }
+
+        window.closeAllModals = function() {
+            document.getElementById("cartModal").classList.remove("open");
+            document.getElementById("sidebar").classList.remove("open");
+            document.getElementById("overlay").classList.remove("active");
+        }
+
+        window.toggleSidebar = function() {
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("overlay");
+            sidebar.classList.toggle("open");
+            overlay.classList.toggle("active");
+        }
+
+        window.renderCartItems = function() {
+            const container = document.getElementById("cart-items-container");
+            const totalPriceEl = document.getElementById("cart-total-price");
+
+            if (cart.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: #777;">Your cart is empty</p>`;
+                totalPriceEl.textContent = "0 EGP";
+                return;
+            }
+
+            let html = "";
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price * item.qty;
+                html += `
+                    <div class="cart-item">
+                        <img src="${item.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                        <div style="flex-grow: 1; padding: 0 10px;">
+                            <div style="font-size: 0.9rem; font-weight: 600;">${item.name}</div>
+                            <div style="font-size: 0.8rem; color: #555;">Size: ${item.size} | Qty: ${item.qty}</div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">${item.price * item.qty} EGP</div>
+                        </div>
+                        <button class="icon-btn" onclick="removeFromCart(${index})" style="color: red;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            totalPriceEl.textContent = total + " EGP";
+        }
+
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            localStorage.setItem("dakn_cart", JSON.stringify(cart));
+            updateCartBadge();
+            renderCartItems();
+            showToast("Product removed from cart.");
+        }
+
+        window.sendOrderWhatsApp = function() {
+            const name = document.getElementById("buyer-name").value.trim();
+            const phone = document.getElementById("buyer-phone").value.trim();
+
+            if (!name || !phone) {
+                showToast("Please enter your name and phone number.");
+                return;
+            }
+
+            if (cart.length === 0) {
+                showToast("Your cart is empty.");
+                return;
+            }
+
+            let message = `New Order from DAKN Store:\nName: ${name}\nPhone: ${phone}\n\nProducts:\n`;
+            let total = 0;
+
+            cart.forEach(item => {
+                message += `- ${item.name} (Size: ${item.size}) x ${item.qty} = ${item.price * item.qty} EGP\n`;
+                total += item.price * item.qty;
+            });
+
+            message += `\nTotal Price: ${total} EGP`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/201234567890?text=${encodedMessage}`, '_blank');
+        }
+
+        window.handleSearch = function(query) {
+            if (!query.trim()) {
+                initStore();
+                return;
+            }
+            const q = query.toLowerCase();
+            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(q));
+            renderHomeGrid(filtered);
+        }
+
+        // Initialize store on load
         initStore();
     </script>
 </body>
