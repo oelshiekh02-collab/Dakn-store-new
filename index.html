@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,7 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            text-align: right;
+            text-align: left;
         }
         header {
             display: flex;
@@ -97,20 +97,20 @@
         .sidebar {
             position: fixed;
             top: 0;
-            right: -100%;
+            left: -100%;
             width: 280px;
             height: 100%;
             background: #fff;
-            border-left: 1px solid var(--border-color);
-            box-shadow: -5px 0 15px rgba(0,0,0,0.05);
-            transition: right 0.3s ease;
+            border-right: 1px solid var(--border-color);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.05);
+            transition: left 0.3s ease;
             z-index: 4000;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             padding: 30px 20px;
         }
-        .sidebar.open { right: 0; }
+        .sidebar.open { left: 0; }
         .sidebar-header {
             display: flex;
             justify-content: space-between;
@@ -239,7 +239,7 @@
             object-fit: cover;
         }
         @media(min-width: 768px) { .product-img { height: 320px; } }
-        .product-info { padding: 10px; text-align: right; }
+        .product-info { padding: 10px; text-align: left; }
         .product-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
         .product-price { font-size: 0.9rem; font-weight: 700; color: #333; margin-bottom: 10px; }
         .btn-outline {
@@ -321,18 +321,18 @@
 
         .cart-modal {
             position: fixed;
-            top: 0; left: -100%;
+            top: 0; right: -100%;
             width: 100%; max-width: 400px;
             height: 100%;
             background: #fff;
-            box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
             z-index: 5000;
-            transition: left 0.3s ease;
+            transition: right 0.3s ease;
             display: flex;
             flex-direction: column;
             padding: 20px;
         }
-        .cart-modal.open { left: 0; }
+        .cart-modal.open { right: 0; }
         .cart-header {
             display: flex;
             justify-content: space-between;
@@ -361,7 +361,7 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-family: 'Cairo', sans-serif;
-            text-align: right;
+            text-align: left;
         }
 
         #toast-notification {
@@ -411,60 +411,60 @@
 
     <header>
         <div class="header-left">
-            <button class="icon-btn" onclick="toggleCart()">
-                <i class="fa-solid fa-bag-shopping"></i>
-                <span class="cart-badge" id="cart-count">0</span>
-            </button>
+            <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
             <div class="search-box">
-                <input type="text" id="search-input" placeholder="بحث..." oninput="handleSearch(this.value)">
+                <input type="text" id="search-input" placeholder="Search..." oninput="handleSearch(this.value)">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
         </div>
         <a href="#" onclick="initStore(); return false;" class="brand-name">DAKN</a>
         <div class="header-right">
-            <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="cart-badge" id="cart-count">0</span>
+            </button>
         </div>
     </header>
 
     <div class="sidebar" id="sidebar">
         <div>
             <div class="sidebar-header">
-                <h3>القائمة</h3>
+                <h3>Menu</h3>
                 <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <ul class="sidebar-links">
-                <li><a href="#" onclick="filterByCategory('tshirt'); toggleSidebar();">تيشيرتات</a></li>
-                <li><a href="#" onclick="filterByCategory('hoodie'); toggleSidebar();">هوديز</a></li>
-                <li><a href="#" onclick="filterByCategory('pants'); toggleSidebar();">بناطيل</a></li>
-                <li><a href="#" onclick="filterByCategory('shorts'); toggleSidebar();">شورتات</a></li>
-                <li><a href="#" onclick="filterByCategory('suits'); toggleSidebar();">بدل</a></li>
-                <li><a href="admin.html">لوحة التحكم</a></li>
+                <li><a href="#" onclick="filterByCategory('tshirt'); toggleSidebar();">T-Shirts</a></li>
+                <li><a href="#" onclick="filterByCategory('hoodie'); toggleSidebar();">Hoodies</a></li>
+                <li><a href="#" onclick="filterByCategory('pants'); toggleSidebar();">Pants</a></li>
+                <li><a href="#" onclick="filterByCategory('shorts'); toggleSidebar();">Shorts</a></li>
+                <li><a href="#" onclick="filterByCategory('suits'); toggleSidebar();">Suits</a></li>
+                <li><a href="admin.html">Admin Dashboard</a></li>
             </ul>
         </div>
         <div class="sidebar-footer">
-            <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram" style="font-size: 1.3rem;"></i> انستجرام</a>
+            <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram" style="font-size: 1.3rem;"></i> Instagram</a>
             <a href="https://wa.me/201234567890" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp" style="font-size: 1.3rem; color: #25d366;"></i> 01234567890</a>
         </div>
     </div>
 
     <div class="cart-modal" id="cartModal">
         <div class="cart-header">
-            <h3>سلة المشتريات</h3>
+            <h3>Shopping Cart</h3>
             <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cart-items-container">
-            <p style="text-align: center; color: #777;">السلة فارغة</p>
+            <p style="text-align: center; color: #777;">Your cart is empty</p>
         </div>
         <div class="cart-footer">
             <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 15px;">
-                <span id="cart-total-price">0 ج.م</span>
-                <span>الإجمالي:</span>
+                <span>Total:</span>
+                <span id="cart-total-price">0 EGP</span>
             </div>
             <div class="checkout-form">
-                <input type="text" id="buyer-name" placeholder="اسمك الكريم">
-                <input type="tel" id="buyer-phone" placeholder="رقم الهاتف">
+                <input type="text" id="buyer-name" placeholder="Your Name">
+                <input type="tel" id="buyer-phone" placeholder="Phone Number">
                 <button class="btn" style="width: 100%; background: #25d366; border-color: #25d366; color: #fff;" onclick="sendOrderWhatsApp()">
-                    <i class="fa-brands fa-whatsapp"></i> اطلب عبر الواتساب
+                    <i class="fa-brands fa-whatsapp"></i> Order via WhatsApp
                 </button>
             </div>
         </div>
@@ -474,23 +474,23 @@
 
     <div class="hero" id="hero-section">
         <div class="hero-content">
-            <h1>اكتشف تشكيلة DAKN الجديدة</h1>
+            <h1>Discover DAKN New Collection</h1>
             <div class="hero-buttons">
-                <a href="#shop-section" class="btn" onclick="showNewArrivals()">وصل حديثاً</a>
-                <a href="#shop-section" class="btn" onclick="renderShopAll()">تسوق الكل</a>
+                <a href="#shop-section" class="btn" onclick="showNewArrivals()">New Arrivals</a>
+                <a href="#shop-section" class="btn" onclick="renderShopAll()">Shop All</a>
             </div>
         </div>
     </div>
 
     <div class="container" id="shop-section">
         <div id="dynamic-content">
-            <p style="text-align: center;">جاري تحميل المنتجات...</p>
+            <p style="text-align: center;">Loading products...</p>
         </div>
     </div>
 
     <footer>
-        <p>جميع الحقوق محفوظة <strong>DAKN</strong> © 2026</p>
-        <p>سياسة الاستبدال والاسترجاع خلال 14 يوم.</p>
+        <p>All Rights Reserved <strong>DAKN</strong> © 2026</p>
+        <p>Exchange and return policy available within 14 days.</p>
     </footer>
 
     <script type="module">
@@ -532,7 +532,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) {
                 console.error(err);
-                document.getElementById("dynamic-content").innerHTML = `<p style="text-align: center; color: red;">فشل تحميل المنتجات.</p>`;
+                document.getElementById("dynamic-content").innerHTML = `<p style="text-align: center; color: red;">Failed to load products.</p>`;
             }
         }
 
@@ -541,13 +541,13 @@
             const container = document.getElementById("dynamic-content");
 
             if (products.length === 0) {
-                container.innerHTML = `<p style="text-align: center;">لا توجد منتجات متاحة حالياً.</p>`;
+                container.innerHTML = `<p style="text-align: center;">No products available.</p>`;
                 return;
             }
 
             let html = `
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">تسوق الكل</h2>
+                    <h2 class="section-title">Shop All</h2>
                     <div class="products-grid">
             `;
 
@@ -557,7 +557,7 @@
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                         <div class="product-info">
                             <div class="product-title">${p.name}</div>
-                            <div class="product-price">${p.price} ج.م</div>
+                            <div class="product-price">${p.price} EGP</div>
                         </div>
                     </div>
                 `;
@@ -565,7 +565,7 @@
 
             html += `</div>`;
             if (products.length > 4) {
-                html += `<div style="text-align: right;"><button class="show-more-link" onclick="renderShopAll()">عرض المزيد</button></div>`;
+                html += `<div style="text-align: left;"><button class="show-more-link" onclick="renderShopAll()">Show More</button></div>`;
             }
             html += `</div>`;
             container.innerHTML = html;
@@ -576,9 +576,9 @@
             const container = document.getElementById("dynamic-content");
 
             let html = `
-                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← العودة للمتجر</button>
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">جميع المنتجات</h2>
+                    <h2 class="section-title">All Products</h2>
                     <div class="products-grid">
             `;
 
@@ -588,7 +588,7 @@
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                         <div class="product-info">
                             <div class="product-title">${p.name}</div>
-                            <div class="product-price">${p.price} ج.م</div>
+                            <div class="product-price">${p.price} EGP</div>
                         </div>
                     </div>
                 `;
@@ -605,9 +605,9 @@
             const newProducts = [...allProducts].reverse().slice(0, 8);
 
             let html = `
-                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← العودة للمتجر</button>
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
                 <div style="margin-bottom: 30px;">
-                    <h2 class="section-title">وصل حديثاً</h2>
+                    <h2 class="section-title">New Arrivals</h2>
                     <div class="products-grid">
             `;
 
@@ -617,7 +617,7 @@
                         <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                         <div class="product-info">
                             <div class="product-title">${p.name}</div>
-                            <div class="product-price">${p.price} ج.م</div>
+                            <div class="product-price">${p.price} EGP</div>
                         </div>
                     </div>
                 `;
@@ -634,14 +634,14 @@
             const filtered = allProducts.filter(p => p.category && p.category.toLowerCase() === category.toLowerCase());
 
             let html = `
-                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← العودة للمتجر</button>
+                <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
                 <div style="margin-bottom: 30px;">
                     <h2 class="section-title">${category.toUpperCase()}</h2>
                     <div class="products-grid">
             `;
 
             if (filtered.length === 0) {
-                html += `<p>لا توجد منتجات في هذا القسم.</p>`;
+                html += `<p>No products found in this category.</p>`;
             } else {
                 filtered.forEach(p => {
                     html += `
@@ -649,7 +649,7 @@
                             <img src="${p.image || ''}" class="product-img" alt="${p.name}">
                             <div class="product-info">
                                 <div class="product-title">${p.name}</div>
-                                <div class="product-price">${p.price} ج.م</div>
+                                <div class="product-price">${p.price} EGP</div>
                             </div>
                         </div>
                     `;
@@ -664,14 +664,14 @@
         window.openProductDetail = async function(id) {
             document.getElementById("hero-section").style.display = "none";
             const container = document.getElementById("dynamic-content");
-            container.innerHTML = `<p style="text-align: center;">جاري تحميل تفاصيل المنتج...</p>`;
+            container.innerHTML = `<p style="text-align: center;">Loading product details...</p>`;
 
             try {
                 const docRef = doc(db, "products", id);
                 const docSnap = await getDoc(docRef);
 
                 if (!docSnap.exists()) {
-                    container.innerHTML = `<p style="text-align: center;">المنتج غير موجود.</p>`;
+                    container.innerHTML = `<p style="text-align: center;">Product not found.</p>`;
                     return;
                 }
 
@@ -679,30 +679,30 @@
                 const sizes = p.sizes ? p.sizes.split(",") : ["S", "M", "L", "XL"];
 
                 let html = `
-                    <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← العودة للمتجر</button>
+                    <button class="btn-outline" onclick="initStore()" style="margin-bottom: 20px;">← Back to Store</button>
                     <div class="product-detail-container">
                         <div>
                             <img src="${p.image || ''}" class="detail-img" alt="${p.name}">
                         </div>
-                        <div style="text-align: right;">
+                        <div style="text-align: left;">
                             <h2 style="font-size: 1.8rem; margin-bottom: 10px;">${p.name}</h2>
-                            <p style="font-size: 1.3rem; font-weight: 700; margin-bottom: 15px;">${p.price} ج.م</p>
-                            <p style="color: #555; margin-bottom: 20px; line-height: 1.6;">${p.description || 'تصميم أنيق وعالي الجودة من DAKN.'}</p>
+                            <p style="font-size: 1.3rem; font-weight: 700; margin-bottom: 15px;">${p.price} EGP</p>
+                            <p style="color: #555; margin-bottom: 20px; line-height: 1.6;">${p.description || 'High quality elegant design from DAKN.'}</p>
                             
-                            <div style="font-weight: 600; margin-bottom: 5px;">اختر المقاس:</div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">Select Size:</div>
                             <div class="size-selector" id="size-selector">
                                 ${sizes.map((s, idx) => `<button class="size-btn ${idx === 0 ? 'active' : ''}" onclick="selectSize(this)">${s.trim()}</button>`).join('')}
                             </div>
 
-                            <div style="font-weight: 600; margin-bottom: 5px;">الكمية:</div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">Quantity:</div>
                             <div class="qty-box">
-                                <button class="qty-btn" onclick="changeQty(1)">+</button>
-                                <span id="product-qty" style="font-weight: 700; font-size: 1.1rem;">1</span>
                                 <button class="qty-btn" onclick="changeQty(-1)">-</button>
+                                <span id="product-qty" style="font-weight: 700; font-size: 1.1rem;">1</span>
+                                <button class="qty-btn" onclick="changeQty(1)">+</button>
                             </div>
 
                             <button class="btn" style="width: 100%; background: #000; color: #fff; padding: 12px; margin-top: 10px;" onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.image || ''}')">
-                                إضافة إلى السلة
+                                Add to Cart
                             </button>
                         </div>
                     </div>
@@ -711,7 +711,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) {
                 console.error(err);
-                container.innerHTML = `<p style="text-align: center; color: red;">خطأ في تحميل تفاصيل المنتج.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: red;">Error loading product details.</p>`;
             }
         }
 
@@ -742,7 +742,7 @@
 
             localStorage.setItem("dakn_cart", JSON.stringify(cart));
             updateCartBadge();
-            showToast("تمت إضافة المنتج إلى السلة بنجاح!");
+            showToast("Product added to cart successfully!");
         }
 
         window.updateCartBadge = function() {
@@ -778,8 +778,8 @@
             const totalPriceEl = document.getElementById("cart-total-price");
 
             if (cart.length === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #777;">السلة فارغة</p>`;
-                totalPriceEl.textContent = "0 ج.م";
+                container.innerHTML = `<p style="text-align: center; color: #777;">Your cart is empty</p>`;
+                totalPriceEl.textContent = "0 EGP";
                 return;
             }
 
@@ -790,19 +790,19 @@
                 total += item.price * item.qty;
                 html += `
                     <div class="cart-item">
-                        <button class="icon-btn" onclick="removeFromCart(${index})" style="color: red;"><i class="fa-solid fa-trash"></i></button>
-                        <div style="flex-grow: 1; padding: 0 10px; text-align: right;">
-                            <div style="font-size: 0.9rem; font-weight: 600;">${item.name}</div>
-                            <div style="font-size: 0.8rem; color: #555;">المقاس: ${item.size} | الكمية: ${item.qty}</div>
-                            <div style="font-size: 0.85rem; font-weight: 700;">${item.price * item.qty} ج.م</div>
-                        </div>
                         <img src="${item.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                        <div style="flex-grow: 1; padding: 0 10px; text-align: left;">
+                            <div style="font-size: 0.9rem; font-weight: 600;">${item.name}</div>
+                            <div style="font-size: 0.8rem; color: #555;">Size: ${item.size} | Qty: ${item.qty}</div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">${item.price * item.qty} EGP</div>
+                        </div>
+                        <button class="icon-btn" onclick="removeFromCart(${index})" style="color: red;"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
             });
 
             container.innerHTML = html;
-            totalPriceEl.textContent = total + " ج.م";
+            totalPriceEl.textContent = total + " EGP";
         }
 
         window.removeFromCart = function(index) {
@@ -810,7 +810,7 @@
             localStorage.setItem("dakn_cart", JSON.stringify(cart));
             updateCartBadge();
             renderCartItems();
-            showToast("تم إزالة المنتج من السلة.");
+            showToast("Product removed from cart.");
         }
 
         window.sendOrderWhatsApp = function() {
@@ -818,24 +818,24 @@
             const phone = document.getElementById("buyer-phone").value.trim();
 
             if (!name || !phone) {
-                showToast("الرجاء إدخال الاسم ورقم الهاتف.");
+                showToast("Please enter your name and phone number.");
                 return;
             }
 
             if (cart.length === 0) {
-                showToast("سلة المشتريات فارغة.");
+                showToast("Your shopping cart is empty.");
                 return;
             }
 
-            let message = `طلب جديد من متجر DAKN:\nالاسم: ${name}\nالهاتف: ${phone}\n\nالمنتجات:\n`;
+            let message = `New Order from DAKN Store:\nName: ${name}\nPhone: ${phone}\n\nProducts:\n`;
             let total = 0;
 
             cart.forEach(item => {
-                message += `- ${item.name} (المقاس: ${item.size}) × ${item.qty} = ${item.price * item.qty} ج.م\n`;
+                message += `- ${item.name} (Size: ${item.size}) x ${item.qty} = ${item.price * item.qty} EGP\n`;
                 total += item.price * item.qty;
             });
 
-            message += `\nإجمالي المبلغ: ${total} ج.م`;
+            message += `\nTotal Amount: ${total} EGP`;
 
             const encodedMessage = encodeURIComponent(message);
             window.open(`https://wa.me/201234567890?text=${encodedMessage}`, '_blank');
